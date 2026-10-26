@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "name": "eight-months-of-silence-hard-constraints",
+  "version": "1.0.0",
+  "description": "Hard, checkable constraints referenced by agent/workflow.json phase ARCHITECTURE_CHECK and SELF_REVIEW. Intended to also back a CI lint step (Roslyn analyzer / custom script) over time — treat as the source of truth for that tooling.",
+  "severity_levels": ["blocker", "major", "minor"],
+  "rules": [
+    {
+      "id": "ARCH-001",
+      "severity": "blocker",
+      "description": "Domain assembly (EOS.Domain.asmdef) must not reference UnityEngine or any com.unity.* package.",
+      "scope": "Assets/_Project/Source/Domain/**"
+    },
+    {
+      "id": "ARCH-002",
+      "severity": "blocker",
+      "description": "Presentation code must not implement gameplay business rules directly (mission legality, puzzle-solution checks, evidence validity). It may only call Application services.",
+      "scope": "Assets/_Project/Source/Presentation/**"
+    },
+    {
+      "id": "ARCH-003",
+      "severity": "blocker",
+      "description": "No circular references between Assembly Definitions.",
+      "scope": "**/*.asmdef"
+    },
+    {
+      "id": "ARCH-004",
+      "severity": "major",
+      "description": "Infrastructure implementations must be bound to an interface defined in Domain or Application at a VContainer composition root, never referenced directly by type from Presentation.",
+      "scope": "Assets/_Project/Source/Infrastructure/**"
+    },
+    {
+      "id": "PATTERN-001",
+      "severity": "blocker",
+      "description": "Forbid FindObjectOfType / FindObjectsOfType / GameObject.Find outside Editor-only tooling scripts.",
+      "match": ["FindObjectOfType", "FindObjectsOfType", "GameObject.Find"],
+      "scope_exclude": ["Assets/_Project/Editor/**"]
+    },
+    {
+      "id": "PATTERN-002",
+      "severity": "blocker",
+      "description": "Forbid new public static X Instance singleton fields holding mutable gameplay state.",
+      "match_regex": "public\\s+static\\s+\\w+\\s+Instance"
+    },
+    {
+      "id": "PATTERN-003",
+      "severity": "major",
+      "description": "Forbid legacy Input Manager calls; New Input System only.",
+      "match": ["Input.GetKey", "Input.GetButton", "Input.GetAxis", "Input.mousePosition"]
+    },
+    {
+      "id": "PATTERN-004",
+      "severity": "major",
+      "description": "Forbid empty catch blocks that swallow exceptions silently.",
+      "match_regex": "catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}"
+    },
+    {
+      "id": "PATTERN-005",
+      "severity": "major",
+      "description": "Forbid async void methods except recognized Unity event entry points (Start, Awake, OnEnable, OnClick handlers).",
+      "match_regex": "async\\s+void\\s+(?!Start|Awake|OnEnable|On[A-Z]\\w*Click)"
+    },
+    {
+      "id": "PATTERN-006",
+      "severity": "minor",
+      "description": "Forbid Resources.Load for new content; use Addressables.",
+      "match": ["Resources.Load"]
+    },
+    {
+      "id": "SIZE-001",
+      "severity": "major",
+      "description": "MonoBehaviour files should not exceed ~200 lines or hold more than one clear responsibility. Flag for split if exceeded.",
+      "scope": "Assets/_Project/Source/Presentation/**"
+    },
+    {
+      "id": "SAVE-001",
+      "severity": "blocker",
+      "description": "Any change to save-data serialization shape requires a docs/DECISIONS.md ADR entry describing migration/versioning.",
+      "scope": "Assets/_Project/Source/Infrastructure/Save/**"
+    },
+    {
+      "id": "TEST-001",
+      "severity": "major",
+      "description": "Every new public method on a Domain or Application class must have at least one corresponding EditMode test.",
+      "scope": "Assets/_Project/Source/Domain/**;Assets/_Project/Source/Application/**"
+    },
+    {
+      "id": "DATA-001",
+      "severity": "minor",
+      "description": "Numeric/string literals used for gameplay tuning (damage, timers, thresholds) should come from a ScriptableObject asset, not be hardcoded in a class body.",
+      "scope": "Assets/_Project/Source/**"
+    },
+    {
+      "id": "VERIFY-001",
+      "severity": "blocker",
+      "description": "MCP PLAY VERIFY: After any change to .cs/.prefab/.unity/.asset/InputActionAsset that touches gameplay mechanics or UI, agent MUST enter Play Mode via unity_unity_play_mode:play, execute the affected mechanic (e.g., PuzzleView panel, Inspection Hotspot examine, Inventory Take), and verify zero MissingComponentException/ArgumentException via unity_unity_console_log + unity_unity_get_compilation_errors (+ screenshot or unity_unity_execute_code for text mechanics). Claiming fixed without MCP play+execute fails this gate.",
+      "scope": "Assets/_Yumiwa/**;Assets/InputSystem_Actions.inputactions;Assets/**/*.unity;Assets/**/*.prefab",
+      "enforcement": "TEST phase via Unity MCP; DoD checklist item MCP PLAY VERIFY in AGENTS.md §7"
+    },
+    {
+      "id": "GDD-001",
+      "severity": "major",
+      "description": "R1 Rujukan Wajib: Setiap keputusan desain/konten harus traceable ke file spesifik di docs/ (contoh: docs/03-core-gameplay-systems.md §Aturan Evidence). Laporan wajib cantumkan rujukan file.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/agent-rules.md#R1"
+    },
+    {
+      "id": "GDD-002",
+      "severity": "blocker",
+      "description": "R2 Larangan Fabrikasi Kanon: Dilarang mengarang fakta naratif, nama karakter, tanggal, angka gameplay final, atau keputusan desain yang belum ada di docs/. Gunakan placeholder eksplisit + tandai asumsi sementara.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/agent-rules.md#R2"
+    },
+    {
+      "id": "GDD-003",
+      "severity": "major",
+      "description": "R3 Pilar sebagai Filter: Sebelum desain sistem/level/konten baru, jawab eksplisit 3 filter — Grounded Horror Movement? Inspection sebagai Utama? Narrative Investigation via tindakan? Jika tidak, revisi.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/agent-rules.md#R3"
+    },
+    {
+      "id": "GDD-004",
+      "severity": "blocker",
+      "description": "R4 Scope Gate: Cek docs/10-production-scope.md sebelum implementasi. Fitur di 'Di Luar Scope Awal' (open world, multiplayer, procedural, skill tree, crafting kompleks, loot rarity, multiple ending, full voice) wajib eskalasi eksplisit.",
+      "scope": "Assets/_Yumiwa/**;docs/10-production-scope.md",
+      "source": "rules/agent-rules.md#R4"
+    },
+    {
+      "id": "GDD-005",
+      "severity": "blocker",
+      "description": "R5 Anti Soft-Lock: Setiap sistem item/evidence/progres wajib cek docs/03-core-gameplay-systems.md aturan anti-frustrasi. Desain yang bisa soft-lock permanen harus ditolak atau diberi recovery path.",
+      "scope": "Assets/_Yumiwa/**;docs/03-core-gameplay-systems.md",
+      "source": "rules/agent-rules.md#R5"
+    },
+    {
+      "id": "GDD-006",
+      "severity": "major",
+      "description": "R6 Rating & Konten Sensitif: Deskripsi kekerasan/gore/luka/kematian harus implisit per docs/01-project-overview.md. Saat ragu, pilih framing tersirat + catat untuk review.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/agent-rules.md#R6"
+    },
+    {
+      "id": "GDD-007",
+      "severity": "major",
+      "description": "R7 Konsistensi Lintas Dokumen: Ubah/tambah topik harus cek dampak ke docs terkait (karakter Bab3 ↔ 04-narrative-and-characters.md). Jangan buat kontradiksi antar docs/*.md.",
+      "scope": "docs/**",
+      "source": "rules/agent-rules.md#R7"
+    },
+    {
+      "id": "GDD-008",
+      "severity": "major",
+      "description": "R8 Transparansi Batas Kemampuan: Jika task butuh keputusan gameplay/naratif milik game director/lead manusia, agent harus state eksplisit, bukan memutuskan sepihak.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/agent-rules.md#R8"
+    },
+    {
+      "id": "TBD-001",
+      "severity": "major",
+      "description": "TBD Diketahui: 9 item di docs/12-references-and-open-tbd.md tidak boleh diputuskan sepihak. Kerjakan bagian non-TBD, tandai output dengan <!-- TBD#N --> + 2-3 opsi, jangan hapus TBD dari docs/12.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/tbd-escalation-rules.md#TBD-Diketahui + docs/12-references-and-open-tbd.md"
+    },
+    {
+      "id": "TBD-002",
+      "severity": "blocker",
+      "description": "TBD Baru: Jika gap desain ditemukan dan belum tercatat di docs/12, BERHENTI sebelum lanjut bagian yang bergantung. Jelaskan kebutuhan + opsi, tunggu arahan, lalu sarankan tambah ke docs/12.",
+      "scope": "docs/**;Assets/_Yumiwa/**",
+      "source": "rules/tbd-escalation-rules.md#TBD-Baru"
+    }
+  ],
+  "enforcement": {
+    "agent_self_check": "Required at workflow phases ARCHITECTURE_CHECK (against the plan) and SELF_REVIEW (against the actual diff).",
+    "ci_recommendation": "Wire these patterns into a Roslyn analyzer or a pre-commit grep-based lint script (scripts/lint-rules.sh) so violations are caught even if an agent's self-check is skipped."
+  }
+}

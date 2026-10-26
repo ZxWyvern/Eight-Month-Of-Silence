@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema#",
+  "name": "eight-months-of-silence-agent-workflow",
+  "version": "1.0.0",
+  "description": "Strict, tool-agnostic state machine that any AI coding agent MUST execute for every task in this repository. Enforced in spirit by AGENTS.md and in constraint form by agent/rules.json.",
+  "binding": true,
+  "applies_to": ["claude-code", "cursor", "windsurf", "copilot-workspace", "codex-cli", "aider", "any-other-agent"],
+  "entry_point": "AGENTS.md",
+  "required_reading": [
+    "AGENTS.md",
+    "docs/GDD.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CODING_STANDARDS.md",
+    "docs/DEFINITION_OF_DONE.md",
+    "agent/rules.json",
+    "docs/DECISIONS.md"
+  ],
+  "global_rules": [
+    "No phase may be skipped. No two phases may be silently merged.",
+    "Every phase's exit_criteria must be satisfied and stated explicitly before the next phase begins.",
+    "If any check in agent/rules.json fails at any point, the agent must stop, fix or report, before proceeding.",
+    "An agent may not mark a task DONE. Only HANDOFF is reachable by an agent; DONE is set by a human."
+  ],
+  "phases": [
+    {
+      "id": "INTAKE",
+      "purpose": "Understand the literal task request and locate it in the codebase and GDD.",
+      "entry_criteria": ["required_reading has been read this session"],
+      "actions": [
+        "Restate the task in one sentence.",
+        "Identify which GDD system(s) (docs/GDD.md §7 table) this task touches.",
+        "Identify which architecture layer(s) (docs/ARCHITECTURE.md §4) this task touches.",
+        "Search the existing codebase for related/overlapping implementations before writing anything new."
+      ],
+      "exit_criteria": [
+        "Task restated in agent's own words.",
+        "Affected GDD system(s) and layer(s) named explicitly.",
+        "Existing related code identified or explicitly confirmed absent."
+      ],
+      "on_ambiguity": "goto CLARIFY"
+    },
+    {
+      "id": "CLARIFY",
+      "purpose": "Resolve ambiguity or missing information before design work begins.",
+      "trigger": "Any condition in AGENTS.md §8, OR GDD/architecture/code disagree, OR task scope is underspecified.",
+      "actions": [
+        "State the specific ambiguity or missing fact.",
+        "State the default assumption the agent would use if forced to proceed, and why.",
+        "If the ambiguity is low-stakes and reversible, state the assumption and proceed to PLAN.",
+        "If the ambiguity is high-stakes per AGENTS.md §8 (save schema, final-encounter state machine, layer-boundary change), stop and ask a human; do not proceed to PLAN."
+      ],
+      "exit_criteria": [
+        "Either a human answer was received, or a stated, low-risk default assumption was adopted and flagged."
+      ],
+      "next": "PLAN"
+    },
+    {
+      "id": "PLAN",
+      "purpose": "Design the solution before touching code.",
+      "actions": [
+        "List the concrete files/classes to be added or changed, grouped by layer (Domain / Application / Infrastructure / Presentation).",
+        "State the dependency direction of any new relationship and confirm it matches docs/ARCHITECTURE.md §1.",
+        "State what tests will be added and at what layer (EditMode/PlayMode).",
+        "Identify any new ScriptableObject config data needed instead of hardcoded values.",
+        "Identify performance-sensitive code paths (per-frame, per-instantiate) and the mitigation (pooling, avoiding allocation)."
+      ],
+      "exit_criteria": [
+        "A concrete, layer-annotated file/class plan exists.",
+        "No planned change violates a forbidden pattern in docs/CODING_STANDARDS.md §4."
+      ],
+      "next": "ARCHITECTURE_CHECK"
+    },
+    {
+      "id": "ARCHITECTURE_CHECK",
+      "purpose": "Self-review the plan against the architecture contract before writing code, catching violations while they're cheap to fix.",
+      "actions": [
+        "Check the plan against every rule in agent/rules.json.",
+        "Check the plan against docs/ARCHITECTURE.md §4 system-to-layer mapping.",
+        "If the plan requires crossing a layer boundary in a new way, treat as CLARIFY trigger (see AGENTS.md §8) before continuing."
+      ],
+      "exit_criteria": [
+        "Plan passes all machine-checkable rules in agent/rules.json.",
+        "Plan passes manual review against docs/ARCHITECTURE.md."
+      ],
+      "on_failure": "goto PLAN",
+      "next": "IMPLEMENT"
+    },
+    {
+      "id": "IMPLEMENT",
+      "purpose": "Write the code per the approved plan.",
+      "actions": [
+        "Implement in layer order Domain -> Application -> Infrastructure -> Presentation where dependencies require it.",
+        "Follow docs/CODING_STANDARDS.md naming and pattern rules exactly.",
+        "Do not introduce any change outside the PLAN's file/class list without returning to PLAN first.",
+        "Write tests alongside implementation, not deferred to a later phase."
+      ],
+      "exit_criteria": [
+        "Code compiles.",
+        "All planned files/classes exist and match the PLAN's layer assignment.",
+        "Tests planned in PLAN are present."
+      ],
+      "next": "SELF_REVIEW"
+    },
+    {
+      "id": "SELF_REVIEW",
+      "purpose": "Adversarial self-check before claiming success — the agent reviews its own diff as if it were a strict senior reviewer.",
+      "actions": [
+        "Re-read the full diff, not just a summary.",
+        "Check every item in docs/DEFINITION_OF_DONE.md applicable to this task type.",
+        "Explicitly search the diff for each forbidden pattern in docs/CODING_STANDARDS.md §4.",
+        "Confirm no unrelated files were modified.",
+        "Confirm no TODO/placeholder logic was left without a docs/DECISIONS.md entry."
+      ],
+      "exit_criteria": [
+        "Definition of Done checklist completed and reported.",
+        "Any deviation explicitly justified in writing, not silently present."
+      ],
+      "on_failure": "goto IMPLEMENT",
+      "next": "TEST"
+    },
+    {
+      "id": "TEST",
+      "purpose": "Execute and verify automated tests; verify manually where automated testing isn't feasible.",
+      "actions": [
+        "Run EditMode tests for all touched Domain/Application code.",
+        "Run PlayMode tests for touched Presentation flows where they exist.",
+        "For untestable Presentation/feel changes, state the manual verification steps taken or required."
+      ],
+      "exit_criteria": [
+        "All existing tests still pass (no regressions).",
+        "New tests required by PLAN exist and pass.",
+        "Any skipped/impossible test is explicitly named with a reason."
+      ],
+      "on_failure": "goto IMPLEMENT",
+      "next": "DOCUMENT"
+    },
+    {
+      "id": "DOCUMENT",
+      "purpose": "Keep living documents truthful.",
+      "actions": [
+        "Update docs/DECISIONS.md if any architectural choice, deferral, or accepted tech debt occurred.",
+        "Update docs/ARCHITECTURE.md §4 mapping table if a new system/subsystem was introduced.",
+        "Update code comments/XML doc summaries for any new public API surface."
+      ],
+      "exit_criteria": [
+        "No architecturally-relevant decision exists only in the agent's chat response and nowhere in the repo."
+      ],
+      "next": "HANDOFF"
+    },
+    {
+      "id": "HANDOFF",
+      "purpose": "Deliver a complete, human-reviewable report. This is the terminal state an agent may reach.",
+      "actions": [
+        "Produce the report format required by AGENTS.md §9: what/why, architecture impact, risks, DoD checklist, follow-ups.",
+        "Explicitly flag anything that needed a human decision but proceeded on a stated assumption (from CLARIFY)."
+      ],
+      "exit_criteria": [
+        "Report delivered in required format.",
+        "Task status is HANDOFF, not DONE — a human marks DONE after review."
+      ],
+      "terminal": true
+    }
+  ],
+  "escalation": {
+    "trigger_conditions": [
+      "GDD, architecture doc, and code disagree",
+      "Task requires a new layer-boundary crossing",
+      "Task touches save-data schema",
+      "Task touches the Adrian encounter / final-level state machine",
+      "Per-frame hot path with unclear performance budget",
+      "Deleting or substantially rewriting code the agent did not author this session without explicit instruction"
+    ],
+    "action": "Stop at current phase, do not proceed, present the issue and a recommended default to a human, resume only after response or an explicitly accepted low-risk default."
+  }
+}

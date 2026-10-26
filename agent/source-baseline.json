@@ -1,0 +1,707 @@
+{
+  "format": "eos-source-baseline",
+  "review_date": "2026-09-23",
+  "source": "ChatGPT.zip plus separately supplied AGENTS(1).md",
+  "agents_sha256": "1cac685c79e4a49c8decc0676c2111483c5e1017741bbe87baaabfd11080fe35",
+  "inventory": {
+    "csharp_files": 158,
+    "assembly_definitions": 6,
+    "test_files": 19
+  },
+  "meaning": "File inventory/hashes for freshness and existence, not a claim that every file was exhaustively audited or that tests passed.",
+  "source_root_candidates": [
+    "Assets/_Yumiwa",
+    "_Yumiwa"
+  ],
+  "source_anchors": [
+    {
+      "path": "Application/AutoReturnService.cs",
+      "sha256": "236ac5d5802453d5401d88679bf3bf3d39bd817b037c02d848f7531bcf52335a"
+    },
+    {
+      "path": "Application/CensorService.cs",
+      "sha256": "5c3fcc4c2e5989e4a00c4e36f6ed04175324e4b32da22535192074e9c20577dc"
+    },
+    {
+      "path": "Application/CheckpointService.cs",
+      "sha256": "056a6bfcbbcad5d91de4e38a6b67e6d31b32759c5a6c3c6360aa65f5a9b84c54"
+    },
+    {
+      "path": "Application/CombatService.cs",
+      "sha256": "cf4162838f4215847cb7209f10de5449627a177604aee1f351c9c3f8265bbcb4"
+    },
+    {
+      "path": "Application/EventBus.cs",
+      "sha256": "1ffd81db527ac44ae764d7dc002e338b48e3bfc0f1e5e094fbf31c05cfffa0da"
+    },
+    {
+      "path": "Application/EvidenceLogService.cs",
+      "sha256": "b68c9da825fae7dbbec485ff4a59b0d1b1dc330a0c4a11aeabd2365e52276b97"
+    },
+    {
+      "path": "Application/FlashlightService.cs",
+      "sha256": "8c625f7acc8ddf39111ef921e9a4cb2646eabebb07b0234e865ccb3119fc0f71"
+    },
+    {
+      "path": "Application/HealthService.cs",
+      "sha256": "da42653326ec2309ec916b6fba0478c3cc701c001c0e369a79cd225e1a16ac0b"
+    },
+    {
+      "path": "Application/InspectionSessionService.cs",
+      "sha256": "04c9476cac684736776bba2563f16641992dfdd7e3b162248e443b8de65b9ad7"
+    },
+    {
+      "path": "Application/InspectionTakeResult.cs",
+      "sha256": "a14c4fde5f08b732b1100d3a0678ce6f5798dabbda4efda8cffd84bca50f221f"
+    },
+    {
+      "path": "Application/InventorySlot.cs",
+      "sha256": "e098c040039f101c47ec59ff4c21596a95d760edfd28bc1ab6cbc65b31fad785"
+    },
+    {
+      "path": "Application/InventorySlotType.cs",
+      "sha256": "ac28ad7994aef7487a0a4d5e1e8675ada0e21e355a59be66f4821d4ec06019ed"
+    },
+    {
+      "path": "Application/MissionFlowService.cs",
+      "sha256": "7276e7f673c99a5bf7038e8b487f1b6f497991a6a659877dd127472234d5ba9b"
+    },
+    {
+      "path": "Application/MovementStateMachine.cs",
+      "sha256": "6c9a60dfa40b48271926a416558de31546db45b001ce7648c4e0433962dfeaf2"
+    },
+    {
+      "path": "Application/ObjectiveService.cs",
+      "sha256": "ff2460c52248bc2919d8c1f05ef45d37bd9a54dddcb6971699353769b484110a"
+    },
+    {
+      "path": "Application/PhysicalInventoryService.cs",
+      "sha256": "8ef0d8fe599953e1428f581c49204f5f838297deb05010786a05d985aea2b780"
+    },
+    {
+      "path": "Application/PuzzleService.cs",
+      "sha256": "b03a21dacd8ceff8f51e7d61db1b1cde49df7e95c40667a3589f8b6a6702a8c8"
+    },
+    {
+      "path": "Application/SimpleInventoryService.cs",
+      "sha256": "03edc3781f3bd261c9f3fbbbba86110af2531314e3ecad789e4e2e6916c924ad"
+    },
+    {
+      "path": "Application/StaminaService.cs",
+      "sha256": "a54765c6c83f96a6296d016de07b1f9fa73651aacdc20784ad595d2b5ce1e58a"
+    },
+    {
+      "path": "Application/TargetingService.cs",
+      "sha256": "995e305d51962d7ad3fb3f8fcad23cec56db958a97d55b56e9bfe14ce6358804"
+    },
+    {
+      "path": "Application/Tests/AirborneMomentumTests.cs",
+      "sha256": "caf78419387229389d11fe46e2493dff34abb0b9983a953aa74b58aa68946cee"
+    },
+    {
+      "path": "Application/Tests/CensorServiceTests.cs",
+      "sha256": "3d8463b0fda3ca5a4587f0289e859f678585e9bfb5521742615c2e4e3bc7fcba"
+    },
+    {
+      "path": "Application/Tests/CheckpointServiceTests.cs",
+      "sha256": "5a9780b606248929db3c58da6d4531e9466918306aba29daa77933426157b4a6"
+    },
+    {
+      "path": "Application/Tests/ConfigDefaultsTests.cs",
+      "sha256": "78da0f4a3a93dc04c1b72fe02567c8c1781aa4b62fa090637cc20841d86dacdf"
+    },
+    {
+      "path": "Application/Tests/EventBusTests.cs",
+      "sha256": "53a94d82dd239fad5730a3d0e593c08ef8ab2493f2dd31c1ccf7eb076cc06322"
+    },
+    {
+      "path": "Application/Tests/EvidenceLogServiceTests.cs",
+      "sha256": "fd583b7f197ff5769e6d7b3e3529fd59b532b856ac124e5cf90749923ff8f6a7"
+    },
+    {
+      "path": "Application/Tests/Fakes.cs",
+      "sha256": "63975c38207e4fd7d2ff1cef836b5ae1fc1cf4cc1a13a334827bb95185fd2901"
+    },
+    {
+      "path": "Application/Tests/HealthServiceTests.cs",
+      "sha256": "7efa4e6614c47ec3e43ba4c41be9669e60f0166c2a068c8aafabed510de499fe"
+    },
+    {
+      "path": "Application/Tests/InspectionRotationModelTests.cs",
+      "sha256": "be576443fdf2603731543abfc817557de43aa3d39d7f2ac26567df63571b1672"
+    },
+    {
+      "path": "Application/Tests/InspectionSessionServiceTests.cs",
+      "sha256": "c13d848bfad6af236edfaa0fd30ffe624c91489f5199b81dd7ece72bd284a982"
+    },
+    {
+      "path": "Application/Tests/MovementStateMachineTests.cs",
+      "sha256": "694ca85f1da3e02dc820483aa2f33fb0c5154b4f3fed3664d1b6c16942e45586"
+    },
+    {
+      "path": "Application/Tests/MovementStateTableTests.cs",
+      "sha256": "dc351356b8c71becd2061b0fc9da23fbccac8161e8df79eef87035d0e07ebc82"
+    },
+    {
+      "path": "Application/Tests/ObjectiveServiceTests.cs",
+      "sha256": "006390bc6e8cd33cc61d14c060f50dac3e46d913ac73ee5461f0d9a145feeacb"
+    },
+    {
+      "path": "Application/Tests/PhysicalInventoryServiceTests.cs",
+      "sha256": "2f37d9e569ba3a16093b3bd3f98205ebbb5a9925182f3bd80a32d534f745d149"
+    },
+    {
+      "path": "Application/Tests/PlayerMovementStateTests.cs",
+      "sha256": "9bbf33d1899f66ea082da4a4e06eb8b4a7920262e9490c1a823a257470df732d"
+    },
+    {
+      "path": "Application/Tests/PuzzleServiceTests.cs",
+      "sha256": "065d3e5dae9b8d562246928ba603279b59e15a77c96d5fb106f9bf680967ef66"
+    },
+    {
+      "path": "Application/Tests/SimpleInventoryServiceTests.cs",
+      "sha256": "71f7f1bb00faf565d30dcf72de7abaa88b1c565bdfd7e5703a62257332b5a8ca"
+    },
+    {
+      "path": "Application/Tests/SlopeSnapModelTests.cs",
+      "sha256": "ea3627079bb7969d973866650fa541ed3d1163ffe23a485d41d36bd8c36a94eb"
+    },
+    {
+      "path": "Application/Tests/StaminaPoolTests.cs",
+      "sha256": "abfec8de62ab36d706f59224e820ef5822d6eeff7fc82d90bb560922dd6df8f9"
+    },
+    {
+      "path": "Application/Tests/StaminaServiceTests.cs",
+      "sha256": "bb456ce4c7c45dc3654612868bd1457ced605d58e640c39ba192b3657f8ee4a8"
+    },
+    {
+      "path": "Application/Tests/Yumiwa.Application.Tests.asmdef",
+      "sha256": "9bde5b8eb80a9a4d5fa93f5f56df2be4ec88849d23b7b9de2793e3d58a91cda1"
+    },
+    {
+      "path": "Application/TrapService.cs",
+      "sha256": "00b461d7a0417841b7f8bfe53b9bdfb4d29eeafeac053a2c250eb498df4eff2d"
+    },
+    {
+      "path": "Application/Yumiwa.Application.asmdef",
+      "sha256": "114003ccbdf99d768f6fadc9d380e928e1233d515ac4db0047bf15d61fb68971"
+    },
+    {
+      "path": "Domain/AirborneMomentum.cs",
+      "sha256": "f7fdc31997eb21086267496042633bcfac7822d0d0f8462d0fbc38a54fb48523"
+    },
+    {
+      "path": "Domain/CensorEffectData.cs",
+      "sha256": "60074a6a2dce4f84a3489cd0850bcc8443ac6fb568941fa27c5133d21a594058"
+    },
+    {
+      "path": "Domain/CensorToggledEvent.cs",
+      "sha256": "da0027158b2608e30f4c8e339ffa87d34463b6dc2217b94f9076c6f82f81c79b"
+    },
+    {
+      "path": "Domain/ChapterState.cs",
+      "sha256": "5ad6a6777c427715327b140276f4b20eee0d6e786830d6d912686adb7cc89d21"
+    },
+    {
+      "path": "Domain/CheckpointData.cs",
+      "sha256": "ed38bb5a1d5e4ffe02e8b99f00f5713e69bcce51287639baea1e37a445bece4f"
+    },
+    {
+      "path": "Domain/CheckpointMilestone.cs",
+      "sha256": "0f91931e71ec9372dc55077f3d74a0472444e9314038c02c656fe261e6080e50"
+    },
+    {
+      "path": "Domain/Evidence.cs",
+      "sha256": "77002200a855c74afe44040fbb7fb2fd6bee9d55fcb0b09fb32cb692b1673404"
+    },
+    {
+      "path": "Domain/EvidenceType.cs",
+      "sha256": "c34d46e47adc659a58742331186480779cad139c75d4ccad0b54dfe344b95a03"
+    },
+    {
+      "path": "Domain/FlashlightState.cs",
+      "sha256": "a832b89a332efa78b543c1ae4eb65c23cc85f4965dda8fa058ecd8a8ea2f6aab"
+    },
+    {
+      "path": "Domain/HandType.cs",
+      "sha256": "9d997546f228665423b3de2465d44b1f09768e54c59b7a4c1407ec141286138c"
+    },
+    {
+      "path": "Domain/HealthChangedEvent.cs",
+      "sha256": "a3a913144e69a1b0cb21c8f993e5518863aab13d2eba0d8cea6666b12e9f6189"
+    },
+    {
+      "path": "Domain/IAmmoReadModel.cs",
+      "sha256": "937a4c0262de7b5665f0ca22e65fecfaadfcb5f5435f0250eb14df30ad1f134a"
+    },
+    {
+      "path": "Domain/ICensorService.cs",
+      "sha256": "f98905f852039d7c7330e5493d9fd939d890e792d71796148fc7c1cd84653da7"
+    },
+    {
+      "path": "Domain/ICheckpointService.cs",
+      "sha256": "b39f9ca2a9583f67426c9423f22137c5fb9dc57a036437b374e47e10ca53d54a"
+    },
+    {
+      "path": "Domain/IConfigProvider.cs",
+      "sha256": "9f8a85006d84752bd950b517e0f5af7e852f8db1302307424c209486777a936d"
+    },
+    {
+      "path": "Domain/IEventBus.cs",
+      "sha256": "a2ca56e1ec57e03c451c4dde788c72bea7e5150f8878be44cd32d107213f7cee"
+    },
+    {
+      "path": "Domain/IEvidenceLog.cs",
+      "sha256": "243a55d2ec838d62308189009cc64d90abb93caa0b19da32a3648f115602998c"
+    },
+    {
+      "path": "Domain/IFlashlightService.cs",
+      "sha256": "64fee0c8d99041a390e5e2936b308e9f9c9acc3d974aa4dad079b835a791882a"
+    },
+    {
+      "path": "Domain/IHealthService.cs",
+      "sha256": "1854f50063d265c51be72a59037603e5f9dfc2231921b23c9eb4a6845813f063"
+    },
+    {
+      "path": "Domain/IInventoryService.cs",
+      "sha256": "4f4e51fb128ac0a48ea1b0874a2f60c760548b7139cae8fd51e718608afcab53"
+    },
+    {
+      "path": "Domain/IMovementStateMachine.cs",
+      "sha256": "b31aa7fa798867bc1e4788d89631d028c8a4e5790ed45a85562947f760033029"
+    },
+    {
+      "path": "Domain/IObjectiveService.cs",
+      "sha256": "4030ac1355e1dc838ab3d81f31cc5bbc4e939c627a3f9358c7d78c19a96ef145"
+    },
+    {
+      "path": "Domain/IPlayerInput.cs",
+      "sha256": "7b991d02028fcd98a5fd5f6a69b1c1f1d1c45f18c56acecf541dae4108b6c2a4"
+    },
+    {
+      "path": "Domain/IPuzzleView.cs",
+      "sha256": "ed37846840717e06527405df09962ddad4b7ad14e4b30e5c9aa7dc408ac282d4"
+    },
+    {
+      "path": "Domain/IRecoveryPoint.cs",
+      "sha256": "427814dbf84423964d2b1510f7820a8b959c25e3db14870726cbc63509c534ba"
+    },
+    {
+      "path": "Domain/ISaveRepository.cs",
+      "sha256": "62d7c7c19a61340c9225fd27d25a5ff117cd5d28f5a4a3a8d69ff9d3391b55c7"
+    },
+    {
+      "path": "Domain/IStaminaService.cs",
+      "sha256": "652a959bbf39e5ab8adb2032839873f4c9fa139b624812bc596ee8e50cd10ebb"
+    },
+    {
+      "path": "Domain/ITargetingService.cs",
+      "sha256": "99599dbd8596da9808504a4bbf2559236232b83e198dbdf90027421697b838f2"
+    },
+    {
+      "path": "Domain/ITimeSource.cs",
+      "sha256": "a7146e46d60663f17bc56284dddfdd002a0c05846ddc8cd168f12ada024a7dad"
+    },
+    {
+      "path": "Domain/IWaterProvider.cs",
+      "sha256": "342f97dda2eea0a7e43ff866dea914291efd1f30dbf406866a13a06f48d9b828"
+    },
+    {
+      "path": "Domain/InspectionEndedEvent.cs",
+      "sha256": "1ecde4886b00bd25eb67de036731d67cc4f5799bba47ce03c4b0e33a896e0905"
+    },
+    {
+      "path": "Domain/InspectionHotspot.cs",
+      "sha256": "4223097e82e4c03c68e33d605b9303a26fc39042657a2094f452f939723e9cf4"
+    },
+    {
+      "path": "Domain/InspectionProgress.cs",
+      "sha256": "b51688f18db9fcafeda2a4da6fa840431e4fb4ffb2b2c26576a078905f9b59c9"
+    },
+    {
+      "path": "Domain/InspectionRotationModel.cs",
+      "sha256": "9c1b5cd7557648f2d7a7f9619bb08da8bf8abba6d1c2bdab611a736ee20b225f"
+    },
+    {
+      "path": "Domain/InspectionStartedEvent.cs",
+      "sha256": "2d4561d2a273eb94db9878e04e2508443a0a677c3366003bb0d9dab4463ac66d"
+    },
+    {
+      "path": "Domain/InspectionTakeFailedEvent.cs",
+      "sha256": "2b1a554639bb913ef3a8b38bff7bcbb7f385a019ff336d599147a182e1bbe2ca"
+    },
+    {
+      "path": "Domain/InspectionTuningData.cs",
+      "sha256": "1af9bc05cfb12d4c3790f701cbf481c9efe14e2d7a263ff1c3a960c89c7bf9ca"
+    },
+    {
+      "path": "Domain/ItemDefinition.cs",
+      "sha256": "ed1e7ff0d5bd1436d6a36c1e78cc758d9427a0b11807975cc68e20a08cd530b9"
+    },
+    {
+      "path": "Domain/ItemKind.cs",
+      "sha256": "903a3146236d06fcd158162a2cde60e96dc5dc17a031b51a030c9a42040ec8aa"
+    },
+    {
+      "path": "Domain/ItemPickedUpEvent.cs",
+      "sha256": "549de8d7d414a33556ad451b96300f46ecbabd9c4c4119cfc143c259d2240e39"
+    },
+    {
+      "path": "Domain/ItemRecoveryEvents.cs",
+      "sha256": "0985bfbfc78988204ef83ed0e11154c4dfd6119ed05c227198b9d940ccdd49e2"
+    },
+    {
+      "path": "Domain/ItemUsedEvent.cs",
+      "sha256": "966d302e556e63c26b2e50ebf7918dc75386f9e90af6ae4040a9771e9024d687"
+    },
+    {
+      "path": "Domain/MissionDefinition.cs",
+      "sha256": "43212b29b792ff3d907da0662d2829d96589db93b3420ee8347c07c7f63e17da"
+    },
+    {
+      "path": "Domain/MovementConfigData.cs",
+      "sha256": "e3bdc5916285e9dcc6a24cb8db54703e8252e316348d7adcacbf8d51dea2498a"
+    },
+    {
+      "path": "Domain/MovementConfigReloadedEvent.cs",
+      "sha256": "d5634291c5fd6b7a84057b96cb0d84ee3bba9779ad393a06087dd926db4d3c1c"
+    },
+    {
+      "path": "Domain/MovementState.cs",
+      "sha256": "7c1531e8ffac9e1f01a47b591ec5c320d1b4057530376b019fe8b32bfb774088"
+    },
+    {
+      "path": "Domain/MovementStateChangedEvent.cs",
+      "sha256": "36948a5f1dfdee54da2dd9331a054c4e4e191a3aba448fcd47f5c7e35441f5c7"
+    },
+    {
+      "path": "Domain/MovementStateData.cs",
+      "sha256": "580f636698fcfca199582bc14e148a27d5c89b51e6598708228987062bfe1703"
+    },
+    {
+      "path": "Domain/MovementStateTable.cs",
+      "sha256": "506483ec101aa03511e4bc7a76ab1107a483886380b2b540155ac7e6cf69aa80"
+    },
+    {
+      "path": "Domain/Objective.cs",
+      "sha256": "9f413d17f5ec76848e638833b017410e4294f821b6e5d8693dd0e2327c95b8b2"
+    },
+    {
+      "path": "Domain/PlanarDirection.cs",
+      "sha256": "e4e676cc359fa924a033f1ed2df2ef87ef3168a8457c985763474b4ce796a936"
+    },
+    {
+      "path": "Domain/PlayerHealedEvent.cs",
+      "sha256": "c423a4aeefa39eca27f5affd00d3f726aeb01d5a891c2c62935a1aa08e6c3726"
+    },
+    {
+      "path": "Domain/PlayerMovementState.cs",
+      "sha256": "8e15e41f5a9d664ea03dc1370334325e75eabad514ff0288243a3b12c9205e25"
+    },
+    {
+      "path": "Domain/PlayerWoundedEvent.cs",
+      "sha256": "b392327c8d9182430d327ce81d65540c16f3a5453f57c6ac238880ed7ae0f8d1"
+    },
+    {
+      "path": "Domain/PuzzleDefinition.cs",
+      "sha256": "0dad8cc3ba2ba202dd8648d49204e0c8d5a7bc5960a74ef0cd7deb6062a768f1"
+    },
+    {
+      "path": "Domain/SettingsData.cs",
+      "sha256": "18c41e9bf5b54dfee11a7ab4c9d1309c2bf022c13724812676313737b52e4f25"
+    },
+    {
+      "path": "Domain/SlopeSnapModel.cs",
+      "sha256": "7464f92beb3f305cbb0b7b6b2a99f9a33969f6e0d8fc8f8e601f849d75d714a3"
+    },
+    {
+      "path": "Domain/StaminaChangedEvent.cs",
+      "sha256": "dc404113cec921a2f86bd373c13d934fa7d647f99e533ea289fcaade0456fd4e"
+    },
+    {
+      "path": "Domain/StaminaConfigData.cs",
+      "sha256": "e4666541ece52820072bff9c6f2945ba2e1f0681d755639a72e39b7a8ac78a6b"
+    },
+    {
+      "path": "Domain/StaminaDepletedEvent.cs",
+      "sha256": "fea1a8c8b1a328c4a4396954fde6e906c657c2902b5926bad74ae25dadd4ea9d"
+    },
+    {
+      "path": "Domain/StaminaPool.cs",
+      "sha256": "4e1ccb7b5201340a886853f58513db24fd8318ab135942b111cacbd9b00bfc37"
+    },
+    {
+      "path": "Domain/TrapDefinition.cs",
+      "sha256": "124d4145b05fbbfd29d32259d0c0f6b8ca4d785fe9c96b7c7e9da319092531f3"
+    },
+    {
+      "path": "Domain/VitalPoint.cs",
+      "sha256": "2034ed0e70a593bb25a9ae21e4ed6502205d817ee0cdbf51090fbeb99fb69401"
+    },
+    {
+      "path": "Domain/WeaponState.cs",
+      "sha256": "9fa1bbd0b4969cb393adc901ecb24034a1df61c50c2272fdea8e0aa74044eb64"
+    },
+    {
+      "path": "Domain/Yumiwa.Domain.asmdef",
+      "sha256": "c8b43b81dae682c33c1132fcfd366500d8e33a5d04418df6a487230cfc9f1417"
+    },
+    {
+      "path": "Infrastructure/CensorEffectConfig.cs",
+      "sha256": "67f00c435e5de3707a5bacee0c4bb3122d4f1e240f00e478b3bf69d42e2939e6"
+    },
+    {
+      "path": "Infrastructure/DirectConfigProvider.cs",
+      "sha256": "a1f294c84f9df7b875f83a7edf4a2b9cfb54a08c5195808c55fba9715f1c71a4"
+    },
+    {
+      "path": "Infrastructure/EvidenceData.cs",
+      "sha256": "8322dbd523afd43a8a45e5b4671c1efeb20c7d2351de45a59868e3b78ec377bc"
+    },
+    {
+      "path": "Infrastructure/FlashlightConfig.cs",
+      "sha256": "e7667c0f050b3276fe6d63a9030adabab7311f77a71b704617e4bf47403458cd"
+    },
+    {
+      "path": "Infrastructure/InspectionConfig.cs",
+      "sha256": "721e85adc123f850477a06e4d65f7081352d82a4ababb341d0dad2a367238a8e"
+    },
+    {
+      "path": "Infrastructure/InspectionHotspotData.cs",
+      "sha256": "641fc912e94faeef51b0b7e058ea88104fe7a37cffde0e35e16e699d6b709b39"
+    },
+    {
+      "path": "Infrastructure/ItemData.cs",
+      "sha256": "c7737ff1d53bc5bb66d1b78fba007ea5ae3e434c54faba7931f7e67764b0907b"
+    },
+    {
+      "path": "Infrastructure/JsonFileSaveRepository.cs",
+      "sha256": "3be914cdeb30cd442b024329c33586068a7df11d1f78ea884c96513e1690faeb"
+    },
+    {
+      "path": "Infrastructure/MissionSequenceAsset.cs",
+      "sha256": "a6c16bbe5d259f12759744738ce5c8eccfe730aeb6f554441bf02b49a7fb586f"
+    },
+    {
+      "path": "Infrastructure/MovementConfig.cs",
+      "sha256": "7ab88007f151befdefc5f3067d04a30f7d9bc34ca415bc8b2602ad0c1b38b469"
+    },
+    {
+      "path": "Infrastructure/NewInputAdapter.cs",
+      "sha256": "d97f8ba497edd0b5b5cec46c5f1d92356e390982664c52f8a9648c34dc6822a7"
+    },
+    {
+      "path": "Infrastructure/PuzzleDefinitionAsset.cs",
+      "sha256": "7e378b3b3f5713db92eb2c00ffd4f037f5554b60cf2c3bb45689f0e36f6e5500"
+    },
+    {
+      "path": "Infrastructure/StaminaConfig.cs",
+      "sha256": "adf631e5103e067f8c16fd3c2f73353b8b7a8a5944de6c8c829d793ced234d30"
+    },
+    {
+      "path": "Infrastructure/TrapDefinitionAsset.cs",
+      "sha256": "a3ae1ad138e9da88c1466c37ab7e91ae75e3618e2f2bd243d65863d090961d65"
+    },
+    {
+      "path": "Infrastructure/UnityTimeSource.cs",
+      "sha256": "c6c7d60ef12a0a60cd0fb5cb8662dd4c16d7daf14df0505e6d1ab044dcc01754"
+    },
+    {
+      "path": "Infrastructure/WaterSensor.cs",
+      "sha256": "12fe9e86c2a177d54aeba92607db009b591023fd2af0116e31efd13d837e2db5"
+    },
+    {
+      "path": "Infrastructure/Yumiwa.Infrastructure.asmdef",
+      "sha256": "5f9f3e400a4d30d0a7c608f6365c09bf657ab85feddda1cd5b7a26c4503cda9e"
+    },
+    {
+      "path": "Presentation/CensorEffectPresenter.cs",
+      "sha256": "1f38f6741029089809e382048787a3577286b14b6935ca40c0a29ebde2e96458"
+    },
+    {
+      "path": "Presentation/CensorToggleController.cs",
+      "sha256": "114cd64bb60ef5cce36f989a9e97cdb262f845bab7820a79e23e1eb15d97bff4"
+    },
+    {
+      "path": "Presentation/CheckpointTrigger.cs",
+      "sha256": "45e3cbcfaabd107d501777a42f43f54cf79aed09e51f9e2c5561ace172980df7"
+    },
+    {
+      "path": "Presentation/DeathReloadPresenter.cs",
+      "sha256": "0f4e1834a1b392ef6069870f2a67e0a226989010515910daa07397b3c73f7f5f"
+    },
+    {
+      "path": "Presentation/Editor/MovementTestSceneSetup.cs",
+      "sha256": "b60161622a0f7fc1f5db8091089b42308b59fe7791c92c5ac530d29f3ee29979"
+    },
+    {
+      "path": "Presentation/Editor/Yumiwa.Presentation.Editor.asmdef",
+      "sha256": "79ffafe0e08e7e8dee8d7b6a5934f991ee703ea0c3b01ae19a6512383b596492"
+    },
+    {
+      "path": "Presentation/EquipmentPivotPresenter.Visuals.cs",
+      "sha256": "a0e27f5e6133ccaf6ef1dad701c61e9610f1a1a6329377a4d383802ddd3c67dc"
+    },
+    {
+      "path": "Presentation/EquipmentPivotPresenter.cs",
+      "sha256": "503ed0a4c38f2372b0446ebd7aa8ed1f1fa687c37c36289acd1f1d5a924db35e"
+    },
+    {
+      "path": "Presentation/EvidenceLogPresenter.cs",
+      "sha256": "85310b03fcc955486a5ac08aad8017aacb40e636b43c234763b4533acc4b7e56"
+    },
+    {
+      "path": "Presentation/FlashlightView.cs",
+      "sha256": "23c379ebbf07dde9451c1115a238aa14eb11c79484d0a880be63611a4d8e51da"
+    },
+    {
+      "path": "Presentation/GameLifetimeScope.cs",
+      "sha256": "9d9b41ee48fb12758e4d385c342df8e5a3d10e81e13f1a866d50cfc78c6e78c8"
+    },
+    {
+      "path": "Presentation/HealthHudPresenter.cs",
+      "sha256": "a92a18411dd5996aef70151f71a046f79f731e7fd1485ca1c4b87acc8a533c62"
+    },
+    {
+      "path": "Presentation/IInspectable.cs",
+      "sha256": "34b89b45614a21f91616190fe2cfa41f0cb39fd454da681cb3e1e393f077c120"
+    },
+    {
+      "path": "Presentation/InspectionHotspotPresenter.cs",
+      "sha256": "2e8fbf9165098385b31d50ce439365e872a2dc65fe11ab64f5c11ed3b74881c1"
+    },
+    {
+      "path": "Presentation/InspectionInputHandler.cs",
+      "sha256": "dabd094ec5f848ea5e3905b17836a0a87e03457612141f4335a0a28ce9ffbe2e"
+    },
+    {
+      "path": "Presentation/InteractionPromptPresenter.cs",
+      "sha256": "04f8dc73ae50a78a17bec653c0c0b9ac95f1c5067bfca60bb61d0459f0ea4722"
+    },
+    {
+      "path": "Presentation/InventoryHudView.cs",
+      "sha256": "93a88a819d2353274726862173e49a195f0028a8204ba9b0257feb1898b2f668"
+    },
+    {
+      "path": "Presentation/InventoryPresenter.cs",
+      "sha256": "12280eb0326e78272a1f997ccac02c1b01cacdf6928bd5261bf06ba7fcb01678"
+    },
+    {
+      "path": "Presentation/ItemInspectionController.Flow.cs",
+      "sha256": "7e2b24eece98ff5adff0d7808daaf1b2af1840e13bb28d8f8ce53d70b537b9bf"
+    },
+    {
+      "path": "Presentation/ItemInspectionController.cs",
+      "sha256": "bf5aaa1dca031968ab19b973118230b60046584297e47cba4004a2f73f2ca8c6"
+    },
+    {
+      "path": "Presentation/ItemInspectionPresenter.cs",
+      "sha256": "5295e890cabf548175efbd433fdc1f3e0e2a3b6a20c2e5946431c8a3711253c0"
+    },
+    {
+      "path": "Presentation/ItemInspectionRotator.cs",
+      "sha256": "32948cf5e7590241cbccdbfdd53f1b6ffd68a9c1e9f1d655144efba1ea34ceb7"
+    },
+    {
+      "path": "Presentation/ItemInspectionUI.cs",
+      "sha256": "d5acdccbf0f4a80a58ea704d70d33cb99d90f7ad1d6f462510f0ff4096a54638"
+    },
+    {
+      "path": "Presentation/MissionHudPresenter.cs",
+      "sha256": "406d5e7383fd234fbe0d6ce942ff74bc7a64f567a8107dc84a803c6dbcbc5b81"
+    },
+    {
+      "path": "Presentation/PlayerInteractor.cs",
+      "sha256": "693c5a59b5bc3cbb26ebb4ce3c3b48824ea025f5c08e5da1d17d9f1b156e6a05"
+    },
+    {
+      "path": "Presentation/PlayerMovementPresenter.Camera.cs",
+      "sha256": "290530516f6a8908f95c22f2d6668b3ad4fb609469925c8d95282a36e95e6d5f"
+    },
+    {
+      "path": "Presentation/PlayerMovementPresenter.Input.cs",
+      "sha256": "8dfdb8483997b4ce3aa999eb462bf52132c84c830e8d64897e1245d6d1d6cc5b"
+    },
+    {
+      "path": "Presentation/PlayerMovementPresenter.Motor.cs",
+      "sha256": "6c585df554aad0e60ef3a54cf284f5f04e19c7dfcf5e404602cce3c7844f7c5e"
+    },
+    {
+      "path": "Presentation/PlayerMovementPresenter.Sprint.cs",
+      "sha256": "ec19867264a2c85fd6002c526f1854dd9e17e1f0017e37dc50b916ff811875ec"
+    },
+    {
+      "path": "Presentation/PlayerMovementPresenter.cs",
+      "sha256": "bea95d1ed0d588becc1172845da3f8e1ef64b15b5056d99d1a66b54ef68c0bda"
+    },
+    {
+      "path": "Presentation/PuzzlePanelFactory.cs",
+      "sha256": "1501f37eec10547396368080355d299b5d282f70a3f3cbc7e038fac54ee09cd9"
+    },
+    {
+      "path": "Presentation/PuzzleView.Logic.cs",
+      "sha256": "fa11f00cf3e54f9456c628a339c625d2c378a64c5b49d58d8ecb84759d1cfdb2"
+    },
+    {
+      "path": "Presentation/PuzzleView.Trigger.cs",
+      "sha256": "5ee5c0fbb73c182e2092739347c3776d691c5309f944cad3d7b9819301b87988"
+    },
+    {
+      "path": "Presentation/PuzzleView.cs",
+      "sha256": "74a7642fa8f30c83eb77c5e445b15f390605625c7d9fbfa848f09b744ec10541"
+    },
+    {
+      "path": "Presentation/StaminaHudPresenter.cs",
+      "sha256": "f0d4a8916e153711b110b8d52695370f5c6b1d27714932048afb60b9269a36e4"
+    },
+    {
+      "path": "Presentation/TrapZone.cs",
+      "sha256": "14a4ce006e864e143cb2b71e236c35bdf2df9317fa0c66f7e2bc532c6fa22019"
+    },
+    {
+      "path": "Presentation/WaterZone.cs",
+      "sha256": "9e3bbedc7a58a92a0a01d5b06e0b06260901a1a7b304edc77f049c1f76eabc83"
+    },
+    {
+      "path": "Presentation/WorldInspectableItem.cs",
+      "sha256": "6d145e5b6e79a9e1eeb4e2ed7d39a460fc1092443177896ab2b0a9c79a6cee17"
+    },
+    {
+      "path": "Presentation/Yumiwa.Presentation.asmdef",
+      "sha256": "f35c009bc58ac767cf105969d55f921f91d2b13fd6739a6734b5ef45235425f3"
+    }
+  ],
+  "project_markers": [
+    "ProjectSettings/ProjectVersion.txt",
+    "ProjectSettings/EditorBuildSettings.asset",
+    "Packages/manifest.json"
+  ],
+  "required_context": [
+    "docs/GDD.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CODING_STANDARDS.md",
+    "docs/DEFINITION_OF_DONE.md",
+    "docs/DECISIONS.md",
+    "docs/00-index.md",
+    "docs/01-project-overview.md",
+    "docs/02-design-pillars-vision.md",
+    "docs/03-core-gameplay-systems.md",
+    "docs/04-narrative-and-characters.md",
+    "docs/05-chapter-structure.md",
+    "docs/06-level-design.md",
+    "docs/07-ui-ux.md",
+    "docs/08-art-and-audio-direction.md",
+    "docs/09-technical-spec.md",
+    "docs/10-production-scope.md",
+    "docs/11-risks-and-dod.md",
+    "docs/12-references-and-open-tbd.md"
+  ],
+  "authoring_capabilities": {
+    "unity_editor": "unavailable",
+    "unity_mcp": "unavailable",
+    "context7_mcp": "unavailable",
+    "opencode_runtime": "unavailable",
+    "csharp_compiler": "unavailable"
+  },
+  "runtime_claims": "None. No compilation, EditMode/PlayMode test, build or OpenCode agent load was executed."
+}

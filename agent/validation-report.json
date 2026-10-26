@@ -1,0 +1,57 @@
+{
+  "static_status": "PASS",
+  "source_check_status": "PASS",
+  "errors": [],
+  "warnings": [
+    "Partial Unity snapshot: editor/package/build facts and runtime verification remain unavailable."
+  ],
+  "blockers": [],
+  "not_verified": [
+    "C# compilation and package/API compatibility",
+    "Unity EditMode/PlayMode tests, actual mechanics, builds and performance",
+    "OpenCode runtime loading, skill invocation, MCP connectivity and permissions",
+    "Every semantic/manual rule, full C# dependency analysis and game completion"
+  ],
+  "workflow": {
+    "phases": 9,
+    "rules": 30,
+    "bundle_files_checked": 15
+  },
+  "source_root": "/workspace/scratch/abd90ed78866/review/ChatGPT/_Yumiwa",
+  "source_freshness": {
+    "reviewed_anchors": 164,
+    "missing": [],
+    "changed": []
+  },
+  "missing_context": [],
+  "missing_unity_project_markers": [
+    "ProjectSettings/ProjectVersion.txt",
+    "ProjectSettings/EditorBuildSettings.asset",
+    "Packages/manifest.json"
+  ],
+  "assembly_graph": {
+    "Yumiwa.Application.Tests": [
+      "Yumiwa.Domain",
+      "Yumiwa.Application",
+      "Yumiwa.Infrastructure"
+    ],
+    "Yumiwa.Application": [
+      "Yumiwa.Domain"
+    ],
+    "Yumiwa.Domain": [],
+    "Yumiwa.Infrastructure": [
+      "Yumiwa.Domain",
+      "Yumiwa.Application"
+    ],
+    "Yumiwa.Presentation.Editor": [
+      "Yumiwa.Domain",
+      "Yumiwa.Infrastructure",
+      "Yumiwa.Presentation"
+    ],
+    "Yumiwa.Presentation": [
+      "Yumiwa.Domain",
+      "Yumiwa.Application",
+      "Yumiwa.Infrastructure"
+    ]
+  }
+}

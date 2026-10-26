@@ -1,0 +1,291 @@
+{
+  "format": "eos-agent-rule-inventory",
+  "name": "eight-months-of-silence-hard-constraints",
+  "version": "2.0.0",
+  "description": "Existing project rule IDs preserved; source scopes corrected to the actual Yumiwa tree. No runtime enforcement implied.",
+  "scope_resolution": {
+    "SOURCE_ROOT": [
+      "Assets/_Yumiwa",
+      "_Yumiwa"
+    ],
+    "rule": "Resolve exactly one active root. Scope checks must not silently match zero files. Scope exclude is limited to the rule containing it."
+  },
+  "severity_levels": [
+    "blocker",
+    "major",
+    "minor"
+  ],
+  "rules": [
+    {
+      "id": "ARCH-001",
+      "severity": "blocker",
+      "description": "Yumiwa.Domain remains engine-free: no Unity namespaces or engine/package assembly references; noEngineReferences must remain true.",
+      "scope": "{SOURCE_ROOT}/Domain/**",
+      "verification": "Assembly flag/reference check plus manual source review.",
+      "source": "AGENTS.md §4; Domain/Yumiwa.Domain.asmdef"
+    },
+    {
+      "id": "ARCH-002",
+      "severity": "blocker",
+      "description": "Presentation code must not implement gameplay business rules directly (mission legality, puzzle-solution checks, evidence validity). It may only call Application services.",
+      "scope": "{SOURCE_ROOT}/Presentation/**",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "ARCH-003",
+      "severity": "blocker",
+      "description": "No circular references between Assembly Definitions.",
+      "scope": "**/*.asmdef",
+      "verification": "Local asmdef graph cycle check; external package compatibility needs the actual Unity project."
+    },
+    {
+      "id": "ARCH-004",
+      "severity": "major",
+      "description": "Gameplay Presentation uses Domain/Application contracts, not concrete Infrastructure types. GameLifetimeScope composition-root wiring and Editor-only tooling are the precise ADR-0018 exceptions.",
+      "scope": "{SOURCE_ROOT}/Presentation/**;{SOURCE_ROOT}/Infrastructure/**",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer.",
+      "source": "docs/DECISIONS.md ADR-0018 final status/decision",
+      "exceptions": [
+        {
+          "paths": [
+            "{SOURCE_ROOT}/Presentation/GameLifetimeScope.cs",
+            "{SOURCE_ROOT}/Presentation/Editor/**"
+          ],
+          "reason": "Composition-root wiring and Editor-only setup; not gameplay business logic.",
+          "source": "docs/DECISIONS.md ADR-0018"
+        }
+      ]
+    },
+    {
+      "id": "PATTERN-001",
+      "severity": "blocker",
+      "description": "No runtime scene-wide dependency search: FindObjectOfType, FindObjectsOfType, FindFirstObjectByType, FindAnyObjectByType, FindObjectsByType or GameObject.Find. Use explicit injection/references; one-time Editor tooling is the documented exception.",
+      "match": [
+        "FindObjectOfType",
+        "FindObjectsOfType",
+        "FindFirstObjectByType",
+        "FindAnyObjectByType",
+        "FindObjectsByType",
+        "GameObject.Find"
+      ],
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer.",
+      "scope": "{SOURCE_ROOT}/**/*.cs",
+      "scope_exclude": [
+        "{SOURCE_ROOT}/Presentation/Editor/**"
+      ]
+    },
+    {
+      "id": "PATTERN-002",
+      "severity": "blocker",
+      "description": "Forbid new public static X Instance singleton fields holding mutable gameplay state.",
+      "match_regex": "public\\s+static\\s+\\w+\\s+Instance",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "PATTERN-003",
+      "severity": "major",
+      "description": "Forbid legacy Input Manager calls; New Input System only.",
+      "match": [
+        "Input.GetKey",
+        "Input.GetButton",
+        "Input.GetAxis",
+        "Input.mousePosition"
+      ],
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "PATTERN-004",
+      "severity": "major",
+      "description": "Forbid empty catch blocks that swallow exceptions silently.",
+      "match_regex": "catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "PATTERN-005",
+      "severity": "major",
+      "description": "Forbid async void methods except recognized Unity event entry points (Start, Awake, OnEnable, OnClick handlers).",
+      "match_regex": "async\\s+void\\s+(?!Start|Awake|OnEnable|On[A-Z]\\w*Click)",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer.",
+      "exceptions": [
+        {
+          "path": "{SOURCE_ROOT}/Infrastructure/JsonFileSaveRepository.cs",
+          "symbol": "WriteAtomicAsync",
+          "source": "docs/DECISIONS.md ADR-0016",
+          "reason": "Existing accepted lifter only; does not validate atomicity, concurrency or future async-void methods."
+        }
+      ]
+    },
+    {
+      "id": "PATTERN-006",
+      "severity": "minor",
+      "description": "No Resources.Load for new content. Preserve documented guarded Resources.GetBuiltinResource font fallback only within its existing ADR-0011 scope; do not treat it as an Addressables implementation.",
+      "match": [
+        "Resources.Load"
+      ],
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "SIZE-001",
+      "severity": "major",
+      "description": "Review MonoBehaviour responsibility and combined size across all partial files. About 200 lines is a review trigger; splitting one class into partial files does not resolve coupled responsibilities.",
+      "scope": "{SOURCE_ROOT}/Presentation/**",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer.",
+      "exceptions": [
+        {
+          "source": "docs/DECISIONS.md ADR-0011",
+          "reason": "Existing named prototype debt only; not blanket approval for new oversized classes."
+        }
+      ]
+    },
+    {
+      "id": "SAVE-001",
+      "severity": "blocker",
+      "description": "Save serialization changes require the project decision/ADR gate and an explicit compatibility/migration plan. Verify completion, independent chapter/house stores, failure handling and requested restore semantics; a version field alone is not a migration.",
+      "scope": "{SOURCE_ROOT}/Domain/CheckpointData.cs;{SOURCE_ROOT}/Domain/ISaveRepository.cs;{SOURCE_ROOT}/Application/CheckpointService.cs;{SOURCE_ROOT}/Infrastructure/JsonFileSaveRepository.cs",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer.",
+      "source": "AGENTS.md §8; docs/DEFINITION_OF_DONE.md; docs/DECISIONS.md ADR-0008/0012/0016"
+    },
+    {
+      "id": "TEST-001",
+      "severity": "major",
+      "description": "For new Domain/Application behavior and public methods, follow the existing EditMode test requirement with meaningful normal/edge/invalid-input cases. Behavior bugfixes need a regression test where testable; existing fake-only coverage does not prove runtime integration.",
+      "scope": "{SOURCE_ROOT}/Domain/**;{SOURCE_ROOT}/Application/**",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "DATA-001",
+      "severity": "minor",
+      "description": "Numeric/string literals used for gameplay tuning (damage, timers, thresholds) should come from a ScriptableObject asset, not be hardcoded in a class body.",
+      "scope": "{SOURCE_ROOT}/**",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "VERIFY-001",
+      "severity": "blocker",
+      "description": "For changed runtime C# or Unity scenes/prefabs/assets/input actions, perform current MCP Play+Execute, current compilation and fresh console checks, with screenshot/state evidence. Verify the actual affected player mechanic and stop Play Mode. Unavailable required runtime means BLOCKED, never PASS.",
+      "scope": "{SOURCE_ROOT}/**/*.cs;Assets/**/*.unity;Assets/**/*.prefab;Assets/**/*.asset;Assets/**/*.inputactions;Assets/**/*.mat",
+      "enforcement": "AGENTS.md §6.1/§7/§11; agent/verification-matrix.md",
+      "verification": "Live Unity MCP execution evidence only; not enforced by the static validator."
+    },
+    {
+      "id": "GDD-001",
+      "severity": "major",
+      "description": "R1 Rujukan Wajib: Setiap keputusan desain/konten harus traceable ke file spesifik di docs/ (contoh: docs/03-core-gameplay-systems.md §Aturan Evidence). Laporan wajib cantumkan rujukan file.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-002",
+      "severity": "blocker",
+      "description": "R2 Larangan Fabrikasi Kanon: Dilarang mengarang fakta naratif, nama karakter, tanggal, angka gameplay final, atau keputusan desain yang belum ada di docs/. Gunakan placeholder eksplisit + tandai asumsi sementara.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-003",
+      "severity": "major",
+      "description": "For new gameplay/content, explicitly check grounded horror movement, meaningful inspection and narrative investigation through player action, plus the experience principles in docs/02-design-pillars-vision.md. Preserve supporting design constraints in docs/GDD.md; report actual conflicts.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-004",
+      "severity": "blocker",
+      "description": "R4 Scope Gate: Cek docs/10-production-scope.md sebelum implementasi. Fitur di 'Di Luar Scope Awal' (open world, multiplayer, procedural, skill tree, crafting kompleks, loot rarity, multiple ending, full voice) wajib eskalasi eksplisit.",
+      "scope": "{SOURCE_ROOT}/**;docs/10-production-scope.md",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-005",
+      "severity": "blocker",
+      "description": "R5 Anti Soft-Lock: Setiap sistem item/evidence/progres wajib cek docs/03-core-gameplay-systems.md aturan anti-frustrasi. Desain yang bisa soft-lock permanen harus ditolak atau diberi recovery path.",
+      "scope": "{SOURCE_ROOT}/**;docs/03-core-gameplay-systems.md",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-006",
+      "severity": "major",
+      "description": "Preserve the project content/rating direction in docs/01-project-overview.md. This is a creative scope rule, not a claim of external rating certification.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-007",
+      "severity": "major",
+      "description": "R7 Konsistensi Lintas Dokumen: Ubah/tambah topik harus cek dampak ke docs terkait (karakter Bab3 ↔ 04-narrative-and-characters.md). Jangan buat kontradiksi antar docs/*.md.",
+      "scope": "docs/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "GDD-008",
+      "severity": "major",
+      "description": "R8 Transparansi Batas Kemampuan: Jika task butuh keputusan gameplay/naratif milik game director/lead manusia, agent harus state eksplisit, bukan memutuskan sepihak.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/00-index.md and relevant numbered GDD document",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "TBD-001",
+      "severity": "major",
+      "description": "TBD Diketahui: 9 item di docs/12-references-and-open-tbd.md tidak boleh diputuskan sepihak. Kerjakan bagian non-TBD, tandai output dengan <!-- TBD#N --> + 2-3 opsi, jangan hapus TBD dari docs/12.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/12-references-and-open-tbd.md",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "TBD-002",
+      "severity": "blocker",
+      "description": "If a new unresolved design fact is required, stop the dependent decision, state the gap and concrete options, and obtain the direction required by AGENTS.md. Complete independent authorized work; do not fabricate an answer or erase the TBD.",
+      "scope": "docs/**;{SOURCE_ROOT}/**",
+      "source": "docs/12-references-and-open-tbd.md",
+      "verification": "Manual evidence review; any match expression is a heuristic, not a complete C# analyzer."
+    },
+    {
+      "id": "ARCH-005",
+      "severity": "blocker",
+      "description": "Yumiwa.Application is engine-free in the supplied asmdef: references Domain only, noEngineReferences true. Do not import Unity types based on the older architecture example.",
+      "scope": "{SOURCE_ROOT}/Application/**",
+      "source": "Application/Yumiwa.Application.asmdef",
+      "verification": "Manual evidence review; ARCH-005 assembly flags/references also checked by static validator."
+    },
+    {
+      "id": "SKILL-001",
+      "severity": "blocker",
+      "description": "Discover and invoke applicable installed skills as required by AGENTS.md. Distinguish a file read from invocation; absent/broken required skills block their operations and must be disclosed.",
+      "scope": "**",
+      "source": "AGENTS.md §6.1/§11.1",
+      "verification": "Manual evidence review; no automatic enforcement claimed."
+    },
+    {
+      "id": "MCP-001",
+      "severity": "blocker",
+      "description": "Use actual exposed Unity/context7 MCP capabilities for operations required by AGENTS.md. Select the correct Unity project/instance. No raw bridge, Unity YAML edits, hidden tool replacement or permission changes to bypass an unavailable capability.",
+      "scope": "**",
+      "source": "AGENTS.md §11.2",
+      "verification": "Manual evidence review; no automatic enforcement claimed."
+    },
+    {
+      "id": "EVIDENCE-001",
+      "severity": "blocker",
+      "description": "Record PASS/FAIL/BLOCKED/NOT_RUN/NOT_APPLICABLE honestly with evidence. Historical claims, file presence and static checks cannot be promoted to current compile, runtime, tool-invocation or performance proof.",
+      "scope": "**",
+      "source": "AGENTS.md §7/§9",
+      "verification": "Manual evidence review; no automatic enforcement claimed."
+    },
+    {
+      "id": "SERIAL-001",
+      "severity": "major",
+      "description": "Preserve existing Unity .meta identities and serialized references. Renames/type changes need a planned migration and live editor verification; never recreate GUIDs or hand-edit YAML to force a pass.",
+      "scope": "Assets/**",
+      "source": "AGENTS.md §2.9/§11.2",
+      "verification": "Manual evidence review; no automatic enforcement claimed."
+    }
+  ]
+}

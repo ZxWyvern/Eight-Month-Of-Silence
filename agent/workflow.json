@@ -1,0 +1,478 @@
+{
+  "format": "eos-agent-workflow",
+  "version": "2.0.0",
+  "name": "eight-months-of-silence-agent-workflow",
+  "entry_point": "AGENTS.md",
+  "purpose": "Operationalize the supplied AGENTS contract against the real Yumiwa snapshot; no game-architecture or permission changes.",
+  "enforcement": {
+    "kind": "Agent protocol, not an automatic runtime or security boundary",
+    "validator": "agent/tools/validate_workflow.py",
+    "automatic_scope": [
+      "JSON and workflow shape",
+      "Nine-phase order and transition/rule references",
+      "Local bundle files and source anchors",
+      "Local assembly graph and engine-free flags"
+    ],
+    "manual_scope": "All other semantic, gameplay, permission, skill invocation and runtime rules remain agent/human review with real tool evidence."
+  },
+  "required_reading": [
+    "AGENTS.md",
+    "docs/GDD.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CODING_STANDARDS.md",
+    "docs/DEFINITION_OF_DONE.md",
+    "agent/workflow.json",
+    "agent/rules.json",
+    "docs/DECISIONS.md",
+    "docs/00-index.md",
+    "docs/01-project-overview.md",
+    "docs/02-design-pillars-vision.md",
+    "docs/03-core-gameplay-systems.md",
+    "docs/04-narrative-and-characters.md",
+    "docs/05-chapter-structure.md",
+    "docs/06-level-design.md",
+    "docs/07-ui-ux.md",
+    "docs/08-art-and-audio-direction.md",
+    "docs/09-technical-spec.md",
+    "docs/10-production-scope.md",
+    "docs/11-risks-and-dod.md",
+    "docs/12-references-and-open-tbd.md"
+  ],
+  "discovery_after_reading": [
+    ".opencode/skills/*/SKILL.md",
+    "opencode.json or opencode.jsonc if present",
+    ".opencode/mcp/ and actual live MCP tools",
+    "Current task/session state and working diff"
+  ],
+  "source_root_candidates": [
+    "Assets/_Yumiwa",
+    "_Yumiwa"
+  ],
+  "task_states": [
+    "IN_PROGRESS",
+    "BLOCKED",
+    "HANDOFF"
+  ],
+  "human_only_task_states": [
+    "DONE"
+  ],
+  "check_states": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "NOT_RUN",
+    "NOT_APPLICABLE"
+  ],
+  "global_rules": [
+    "All nine phases are visited in order, including CLARIFY when no question is needed. Record each exit explicitly; do not silently merge or skip phases.",
+    "AGENTS.md governs project requirements subject to the host instruction hierarchy and explicit authorized task scope; no workflow file grants permissions or bypasses approval/access controls.",
+    "A task request already authorizes its routine necessary work. Preserve earlier authorization; ask only for the unresolved decisions required by AGENTS.md.",
+    "Neither a skill file read nor server configuration is a successful invocation. Record availability, invocation and evidence separately.",
+    "Accepted exceptions remain limited to documented symbols/files. Historical test claims and comments do not establish current behavior.",
+    "Unavailable mandatory checks block their phase; they cannot be marked NOT_APPLICABLE merely because the environment cannot run them.",
+    "Do not mark agent work DONE; only HANDOFF is the successful agent terminal state."
+  ],
+  "routes": {
+    "workflow_docs": {
+      "when": "Agent instructions/workflows/documentation only; no game code or Unity asset behavior changed.",
+      "required_outputs": [
+        "Concrete updated artifact(s)",
+        "Reference/frontmatter/JSON validation when applicable",
+        "Named source/tooling limitations"
+      ],
+      "runtime_verification": "NOT_APPLICABLE only when no Unity runtime or asset changes occurred; retain required skill checks."
+    },
+    "bugfix": {
+      "when": "Repair an observed or source-proven defect.",
+      "required_outputs": [
+        "Observed symptom vs hypothesis/static evidence",
+        "Reproduction and root-cause path",
+        "Smallest coherent fix",
+        "Regression evidence through the affected real boundary"
+      ],
+      "focus": [
+        "Interface/caller/fake compatibility",
+        "State mutation ordering",
+        "Negative and lifecycle scenarios"
+      ]
+    },
+    "gameplay_feature": {
+      "when": "Add or change a player-facing mechanic.",
+      "required_outputs": [
+        "GDD pillar/scope check",
+        "Relevant story-mechanics ticket, chapter beat, production scope and dependency evidence when applicable",
+        "State ownership and failure/recovery contract",
+        "DI/config/input/presentation integration",
+        "Affected tests plus live Play+Execute evidence"
+      ],
+      "focus": [
+        "Reuse current services",
+        "Data-driven tuning",
+        "Anti-soft-lock",
+        "No disconnected code-only feature"
+      ]
+    },
+    "narrative_content": {
+      "when": "Story beat, audio cue, level scripting, cutscene or encounter support.",
+      "required_outputs": [
+        "Completed narrative-beat-template",
+        "Relevant story-mechanics ticket and canonical chapter order versus production order",
+        "Canon/TBD source references",
+        "Trigger-to-consequence contract",
+        "Cancellation/retry/persistence behavior",
+        "Validation of affected logic and actual scene execution if implemented"
+      ],
+      "focus": [
+        "Information gained by player action",
+        "Readable learnable cues",
+        "No assumed narrative runner",
+        "Adrian/final encounter scope gate"
+      ]
+    },
+    "refactor": {
+      "when": "Change structure while preserving behavior.",
+      "required_outputs": [
+        "Concrete design problem",
+        "Compatibility/migration plan",
+        "Before/after dependency path",
+        "Behavior preservation evidence"
+      ],
+      "focus": [
+        "Partial classes are one type",
+        "Serialized fields and GUIDs",
+        "Public API/fakes",
+        "No unrelated rewrite"
+      ]
+    },
+    "performance": {
+      "when": "Address a measured frame time, allocation or load/save stall.",
+      "required_outputs": [
+        "Actual workload/hardware/version baseline",
+        "Measured cause",
+        "Bounded change",
+        "Comparable before/after measurement"
+      ],
+      "focus": [
+        "No invented 0B/60FPS claim",
+        "Correctness unchanged",
+        "Named hot paths",
+        "Known budget or required decision"
+      ]
+    }
+  },
+  "phases": [
+    {
+      "id": "INTAKE",
+      "purpose": "Establish task, actual project state and required capabilities.",
+      "entry_criteria": [
+        "User task and accessible project context identified."
+      ],
+      "actions": [
+        "Follow AGENTS.md section 0 read order; enumerate installed skills and live MCP tools, and invoke help or project-stage-detect as required by section 6.1.",
+        "Read the current diff without overwriting user work. Detect the active source root; distinguish an exported snapshot from a runnable Unity project.",
+        "Restate the requested outcome and acceptance criteria. Select task route(s), GDD systems and affected layers.",
+        "For story/mechanics planning or implementation, read agent/story-mechanics-workflow.md after mandatory discovery. Select a relevant ticket within authorized scope, refresh its source claims and record dependency evidence; the backlog is not authorization to execute every ticket.",
+        "Trace existing input/trigger, service, state, event, presentation, config and recovery owners. Read the corresponding source and tests; verify code-map claims.",
+        "For Unity scene/prefab work, inspect the correct project and selected instance through the live MCP. Record missing inputs/capabilities without claiming a connection."
+      ],
+      "exit_criteria": [
+        "The task, scope, actual source anchors, baseline state and selected route(s) are recorded.",
+        "Required skills/MCP are identified and intake invocations have evidence; unresolved capability failures are BLOCKED, not silently bypassed."
+      ],
+      "rule_ids": [
+        "SKILL-001",
+        "MCP-001",
+        "EVIDENCE-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "CLARIFY"
+    },
+    {
+      "id": "CLARIFY",
+      "purpose": "Resolve only ambiguities that affect the task before dependent work.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Always visit this phase. If none remain, record no unresolved ambiguity and proceed without a question.",
+        "Compare the current code, relevant GDD sections and accepted ADRs. Separate intended design from supplied implementation; do not use old PASS logs as current evidence.",
+        "Honor authorization already present. For an unresolved AGENTS.md section 8 trigger, provide exact conflicting sources, impact and a recommended option; obtain the required decision before dependent edits.",
+        "Use required help/context7 tools when applicable. If a required tool is unavailable, record the precise blocked operation and complete independent authorized preparation.",
+        "Keep open TBDs explicit. A low-risk assumption is allowed only within the existing contract/task authorization; it cannot decide canon, new layer boundaries, save schema or final encounter rules."
+      ],
+      "exit_criteria": [
+        "Task-dependent ambiguities are resolved by evidence or existing/explicit authorization, or the task remains BLOCKED at CLARIFY.",
+        "No final design decision is inferred merely from prototype defaults or old examples."
+      ],
+      "rule_ids": [
+        "GDD-002",
+        "GDD-004",
+        "GDD-008",
+        "TBD-001",
+        "TBD-002"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "PLAN"
+    },
+    {
+      "id": "PLAN",
+      "purpose": "Specify a bounded implementation and its evidence before edits.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "List changed files/types by actual layer, including partial siblings, tests, DI registration, config assets, input and serialized references.",
+        "Specify observable success, rejection, cancellation and recovery behavior; identify save compatibility, allocation and lifecycle risks.",
+        "For a story/mechanics ticket, map player action to information and consequence, identify MVP/slice/full-story scope, and preserve canon/TBD gates. Reuse implemented systems; separate code existence from scene integration and verified completion.",
+        "Select affected verification-matrix rows. State the actual tests/Play Mode interaction, not just run tests.",
+        "Invoke architecture-decision/create-architecture for applicable decisions; no free-form replacement of an available required skill.",
+        "For narrative work use narrative-beat-template.md and mark missing runner/audio/cutscene infrastructure as proposed work, never as already implemented."
+      ],
+      "exit_criteria": [
+        "A concrete file/type plan, dependency direction, risks and acceptance-to-verification mapping exist.",
+        "Applicable skill/MCP plan and any required decision/ADR evidence are recorded."
+      ],
+      "rule_ids": [
+        "ARCH-001",
+        "ARCH-002",
+        "ARCH-003",
+        "ARCH-004",
+        "ARCH-005",
+        "DATA-001",
+        "SAVE-001",
+        "SKILL-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "ARCHITECTURE_CHECK"
+    },
+    {
+      "id": "ARCHITECTURE_CHECK",
+      "purpose": "Check the plan against the project contract and current exceptions.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Evaluate all applicable agent/rules.json entries and record applicability for others. Manual rules require review; they are not proven by JSON parsing.",
+        "Confirm Domain and Application remain engine-free, dependency references remain acyclic and no new Presentation-to-Infrastructure usage escapes the exact composition-root/editor exception.",
+        "Check the GDD pillars, scope, anti-soft-lock behavior, canon and TBDs. Preserve current names without claiming Proposed ADR-0010 is accepted.",
+        "Verify planned tool usage against AGENTS.md sections 6.1 and 11; unavailable mandatory tools block the affected work.",
+        "Run the workflow validator when these workflow files change. Invoke installed gate-check when a project stage gate is actually being advanced."
+      ],
+      "exit_criteria": [
+        "All applicable blockers are resolved, existing exceptions are precisely sourced and no capability bypass is planned.",
+        "Failed plans return to PLAN; unresolved material decisions return to CLARIFY."
+      ],
+      "rule_ids": [
+        "ARCH-001",
+        "ARCH-002",
+        "ARCH-003",
+        "ARCH-004",
+        "ARCH-005",
+        "GDD-003",
+        "GDD-004",
+        "GDD-005",
+        "SKILL-001",
+        "MCP-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "IMPLEMENT",
+      "on_failure": "PLAN"
+    },
+    {
+      "id": "IMPLEMENT",
+      "purpose": "Deliver the authorized change with its integration and relevant tests.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Implement only planned scope; add/adjust meaningful tests with behavior changes. Revisit PLAN if the necessary scope changes.",
+        "Reuse existing boundaries. Introduce no unrequested framework, namespace migration, global manager or duplicate state owner.",
+        "For Unity asset/editor/script changes use required live Unity MCP. Preserve GUIDs, serialized data and composition-root registrations; do not hand-edit Unity YAML or use the raw bridge.",
+        "Wire the real input, scene/prefab references, configs and visible feedback. Include failure, cancellation, disable/re-enable and recovery paths.",
+        "Compile applicable changed code with the real toolchain. If that toolchain is unavailable, keep the gate BLOCKED and hand off only the explicitly unverified work."
+      ],
+      "exit_criteria": [
+        "Planned artifacts exist, authorized integration is complete and applicable compilation has current evidence.",
+        "Required behavior tests are present, no undocumented placeholders remain, and no unrelated edits were made."
+      ],
+      "rule_ids": [
+        "PATTERN-001",
+        "PATTERN-002",
+        "PATTERN-003",
+        "PATTERN-004",
+        "PATTERN-005",
+        "PATTERN-006",
+        "SIZE-001",
+        "TEST-001",
+        "DATA-001",
+        "SERIAL-001",
+        "MCP-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "SELF_REVIEW"
+    },
+    {
+      "id": "SELF_REVIEW",
+      "purpose": "Review the full relevant diff against failure paths and documented contracts.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Read the diff and affected call sites, interface consumers, fakes and all partial files. Check the applicable Definition of Done and rule IDs.",
+        "Check event subscription/cleanup, state mutation order, input-map ownership, idempotency, missing dependencies, recovery and serialized compatibility.",
+        "Review accepted exceptions in context. Do not expand ADR-0016 async-void or ADR-0018 composition-root exceptions to unrelated code.",
+        "Record static defects separately from hypotheses and runtime observations; do not repair unrelated baseline findings without authorization.",
+        "Audit actual skill/MCP use. If a required tool was bypassed, disclose it and correct/validate through the required mechanism before passing."
+      ],
+      "exit_criteria": [
+        "No new unresolved review blocker remains; behavior/architecture/tooling checks have evidence.",
+        "A failed review returns to IMPLEMENT or PLAN depending on whether the fix changes the plan."
+      ],
+      "rule_ids": [
+        "ARCH-002",
+        "ARCH-004",
+        "PATTERN-001",
+        "PATTERN-004",
+        "PATTERN-005",
+        "SIZE-001",
+        "GDD-005",
+        "SKILL-001",
+        "MCP-001",
+        "EVIDENCE-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "TEST",
+      "on_failure": "IMPLEMENT"
+    },
+    {
+      "id": "TEST",
+      "purpose": "Prove the affected behavior with the required current evidence.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Run the applicable verification-matrix rows and planned automated tests using actual available runners. Report exact commands/tools and results.",
+        "For runtime C#/Unity asset/input changes perform AGENTS.md section 7 MCP Play+Execute: identify scene/instance, compile, enter Play, perform the player mechanic/UI, collect fresh console and screenshot/state evidence, stop Play.",
+        "Use negative/repeated/interrupt/reload scenarios required by the route. Calling a service method does not alone verify input, collider, animation or UI integration.",
+        "Check for fresh errors/exceptions including MissingComponentException, ArgumentException and NullReferenceException, and distinguish baseline issues.",
+        "Mark each check PASS, FAIL, BLOCKED, NOT_RUN or NOT_APPLICABLE with a reason. Missing tooling or an unexecuted applicable check prevents a successful TEST exit."
+      ],
+      "exit_criteria": [
+        "All applicable required checks actually passed, relevant existing tests have no regressions and evidence is recorded.",
+        "Only genuinely out-of-scope checks are NOT_APPLICABLE. Failed tests return to IMPLEMENT; absent required capability leaves TEST BLOCKED."
+      ],
+      "rule_ids": [
+        "TEST-001",
+        "VERIFY-001",
+        "GDD-005",
+        "SAVE-001",
+        "EVIDENCE-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "DOCUMENT",
+      "on_failure": "IMPLEMENT"
+    },
+    {
+      "id": "DOCUMENT",
+      "purpose": "Keep the affected contracts and resume context truthful.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Update only docs affected by the task; maintain traceability to GDD, code and decisions. Never silently rewrite append-only decision history.",
+        "Use the architecture skills for required ADR/architecture changes; preserve Proposed vs Accepted status.",
+        "Record verification evidence, remaining limitations and deferred items. Update code-map/source anchors if the scoped change invalidates them.",
+        "Persist current task state at the existing session-state location when useful for continuation; do not overwrite another task record."
+      ],
+      "exit_criteria": [
+        "No relevant decision or deferral exists only in chat; necessary documentation and evidence are available.",
+        "No document asserts an unexecuted test, unimplemented system or unapproved design decision as complete."
+      ],
+      "rule_ids": [
+        "GDD-001",
+        "GDD-007",
+        "TBD-001",
+        "SKILL-001",
+        "EVIDENCE-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "next": "HANDOFF"
+    },
+    {
+      "id": "HANDOFF",
+      "purpose": "Deliver the complete reviewable result and honest validation status.",
+      "entry_criteria": [
+        "Required preceding phase exited with evidence."
+      ],
+      "actions": [
+        "Use AGENTS.md section 9 ordered report: what/why, architecture impact, actual skills/MCP, risks, DoD, follow-ups.",
+        "Link or name concrete changed files and evidence. Include Play duration/console/screenshot or state-dump information when applicable.",
+        "Distinguish delivered artifacts from human acceptance. Only a human assigns DONE."
+      ],
+      "exit_criteria": [
+        "Report is delivered with all applicable gates passed and any non-applicable checks justified.",
+        "Task state is HANDOFF. A blocked partial report is explicitly BLOCKED and does not claim to have reached this successful terminal state."
+      ],
+      "rule_ids": [
+        "EVIDENCE-001"
+      ],
+      "on_blocked": {
+        "task_state": "BLOCKED",
+        "retain_phase": true,
+        "action": "Name the exact blocker, preserve work/evidence, and complete independent authorized preparation without passing this phase."
+      },
+      "terminal": true
+    }
+  ],
+  "artifacts": {
+    "agent_profile": "agents/workflow-agent.md",
+    "code_map": "agent/code-map.md",
+    "source_review": "agent/review-findings.md",
+    "verification_matrix": "agent/verification-matrix.md",
+    "task_template": "agent/task-template.md",
+    "session_template": "agent/session-template.md",
+    "narrative_template": "agent/narrative-beat-template.md",
+    "story_mechanics": "agent/story-mechanics-workflow.md",
+    "source_baseline": "agent/source-baseline.json"
+  },
+  "report_order": [
+    "What changed and why",
+    "Architecture impact",
+    "Skills & MCP used",
+    "Risks",
+    "Definition of Done checklist",
+    "Follow-ups"
+  ]
+}

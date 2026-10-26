@@ -1,0 +1,20 @@
+{
+  "python_syntax": "PASS",
+  "workflow_and_snapshot_static_validation": "PASS",
+  "negative_and_boundary_checks": [
+    "Reject missing CLARIFY phase",
+    "Reject unknown rule references",
+    "Reject broken command routing",
+    "Missing source is BLOCKED unless structure-only requested",
+    "Structure-only never claims source checked",
+    "Reject local assembly cycle",
+    "Reject disabled engine-free contract",
+    "Reject bundle references outside selected root"
+  ],
+  "negative_and_boundary_checks_result": "PASS",
+  "original_inputs_preserved": "PASS",
+  "unity_game_compilation": "NOT_RUN — Unity/C# toolchain unavailable",
+  "unity_game_tests": "NOT_RUN — Unity/MCP unavailable",
+  "opencode_runtime_load": "NOT_RUN — OpenCode unavailable",
+  "note": "No gameplay files were changed. This report is about workflow artifact validation, not acceptance of a game implementation."
+}
