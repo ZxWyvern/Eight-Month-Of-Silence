@@ -1,0 +1,40 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "timeout": 30000
+    },
+    "unity": {
+      "type": "local",
+      "command": ["npx", "-y", "anklebreaker-unity-mcp@latest"],
+      "enabled": true,
+      "environment": {
+        "UNITY_HUB_PATH": "C:\\Program Files\\Unity Hub\\Unity Hub.exe",
+        "UNITY_BRIDGE_PORT": "7890"
+      },
+      "timeout": 60000
+    }
+  },
+  "instructions": ["AGENTS.md"],
+  "provider": {
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OmniRoute",
+      "options": {
+        "baseURL": "http://localhost:20128/v1",
+        "apiKey": "sk-d43b05b66664b556-2659d6-2f8c00bb"
+      },
+      "models": {
+        "main-combo": {
+          "name": "main-combo"
+        }
+      }
+    }
+  },
+  "experimental": {
+    "mcp_timeout": 30000
+  }
+}

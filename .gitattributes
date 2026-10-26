@@ -1,0 +1,84 @@
+# Git attributes for Git LFS tracking of Unity binary assets
+# Unity Binary Files - Git LFS
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.bmp filter=lfs diff=lfs merge=lfs -text
+# Unity 3D Models - Git LFS
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.dae filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.3ds filter=lfs diff=lfs merge=lfs -text
+*.usd filter=lfs diff=lfs merge=lfs -text
+*.usda filter=lfs diff=lfs merge=lfs -text
+*.usdc filter=lfs diff=lfs merge=lfs -text
+# Unity Audio - Git LFS
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.aif filter=lfs diff=lfs merge=lfs -text
+*.aiff filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
+# Unity Video - Git LFS
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text
+# Unity Scene/Animation Assets - Git LFS
+*.unity filter=lfs diff=lfs merge=lfs -text
+*.prefab filter=lfs diff=lfs merge=lfs -text
+*.mat filter=lfs diff=lfs merge=lfs -text
+*.anim filter=lfs diff=lfs merge=lfs -text
+*.controller filter=lfs diff=lfs merge=lfs -text
+*.physicMaterial filter=lfs diff=lfs merge=lfs -text
+*.playable filter=lfs diff=lfs merge=lfs -text
+*.mask filter=lfs diff=lfs merge=lfs -text
+*.layout filter=lfs diff=lfs merge=lfs -text
+# Unity Fonts - Git LFS
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
+# Unity Render Textures/Cubemaps - Git LFS
+*.cubemap filter=lfs diff=lfs merge=lfs -text
+*.renderTexture filter=lfs diff=lfs merge=lfs -text
+*.cubemaps filter=lfs diff=lfs merge=lfs -text
+# Unity Input Actions - Git LFS
+*.inputactions filter=lfs diff=lfs merge=lfs -text
+# Unity ScriptableObjects with binary data - Git LFS
+*.asset filter=lfs diff=lfs merge=lfs -text
+# Unity Animation Rigging
+*.rigidbody filter=lfs diff=lfs merge=lfs -text
+# Unity Shader variants (binary)
+*.shadergraph filter=lfs diff=lfs merge=lfs -text
+# Unity Audio Mixer
+*.mixer filter=lfs diff=lfs merge=lfs -text
+# Unity Visual Effect Graph
+*.vfxgraph filter=lfs diff=lfs merge=lfs -text
+*.vfxfilter filter=lfs diff=lfs merge=lfs -text
+*.vfxreference filter=lfs diff=lfs merge=lfs -text
+*.vfxgraphshader filter=lfs diff=lfs merge=lfs -text
+# Unity Audio
+*.aifilter filter=lfs diff=lfs merge=lfs -text
+*.aw filter=lfs diff=lfs merge=lfs -text
+# Unity Audio Mixer
+*.audioMixerGroup filter=lfs diff=lfs merge=lfs -text
+# Unity Render Texture
+*.sxr filter=lfs diff=lfs merge=lfs -text
+# Unity Shaders (for safety)
+*.shader filter=lfs diff=lfs merge=lfs -text
+# Unity Editor Settings
+*.editorSettings filter=lfs diff=lfs merge=lfs -text
+# Unity Test Runner
+*.testRunnerFilter filter=lfs diff=lfs merge=lfs -text
+*.coveragefilter filter=lfs diff=lfs merge=lfs -text
+# Unity Asset Database
+*.assetDatabase filter=lfs diff=lfs merge=lfs -text
+# Unity Editor Log
+*.log filter=lfs diff=lfs merge=lfs -text
+# Unity Package
+*.unitypackage filter=lfs diff=lfs merge=lfs -text
