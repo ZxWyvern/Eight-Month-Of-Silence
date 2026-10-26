@@ -1,0 +1,14 @@
+{
+  "name": "Yumiwa.Infrastructure",
+  "rootNamespace": "Yumiwa.Infrastructure",
+  "references": ["Yumiwa.Domain", "Yumiwa.Application", "Unity.InputSystem"],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

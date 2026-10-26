@@ -1,0 +1,14 @@
+{
+  "name": "Yumiwa.Presentation.Tests",
+  "rootNamespace": "Yumiwa.Presentation.Tests",
+  "references": ["Yumiwa.Domain", "Yumiwa.Application", "Yumiwa.Presentation", "Yumiwa.Infrastructure", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

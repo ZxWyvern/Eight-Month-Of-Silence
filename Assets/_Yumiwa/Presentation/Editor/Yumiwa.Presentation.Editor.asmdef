@@ -1,0 +1,24 @@
+{
+  "name": "Yumiwa.Presentation.Editor",
+  "rootNamespace": "Yumiwa.Presentation.Editor",
+  "references": [
+    "Yumiwa.Domain",
+    "Yumiwa.Infrastructure",
+    "Yumiwa.Presentation",
+    "VContainer",
+    "Unity.Cinemachine",
+    "Unity.InputSystem",
+    "Unity.TextMeshPro"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
