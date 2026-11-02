@@ -1,0 +1,15 @@
+﻿<Solution>
+  <Project Path="Yumiwa.Application.csproj" />
+  <Project Path="Yumiwa.Infrastructure.csproj" />
+  <Project Path="Yumiwa.Domain.csproj" />
+  <Project Path="Yumiwa.Presentation.csproj" />
+  <Project Path="Yumiwa.Application.Tests.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="DOTween.Modules.csproj" />
+  <Project Path="Unity.StarterAssets.Editor.csproj" />
+  <Project Path="Yumiwa.Presentation.Tests.csproj" />
+  <Project Path="Unity.StarterAssets.csproj" />
+  <Project Path="Yumiwa.Presentation.Editor.csproj" />
+  <Project Path="URPWizard.csproj" />
+</Solution>
