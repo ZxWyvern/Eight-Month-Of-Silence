@@ -79,6 +79,27 @@ namespace Yumiwa.Application
             return null;
         }
 
+        /// <summary>
+        /// Returns an undiscovered hotspot valid at the current rotation without
+        /// examining it. Used only for the "detail tersedia" affordance.
+        /// </summary>
+        public string PeekFirstValidHotspot(InspectionRotationModel rotation)
+        {
+            if (!active || currentHotspots == null || rotation == null)
+                return null;
+            progressByItem.TryGetValue(current.ItemId, out var progress);
+            foreach (var hs in currentHotspots)
+            {
+                if (!hs.IsValid || string.IsNullOrEmpty(hs.HotspotId))
+                    continue;
+                if (progress != null && progress.IsDiscovered(hs.HotspotId))
+                    continue;
+                if (hs.IsAngleValid(rotation.Yaw, rotation.Pitch, rotation.Distance))
+                    return hs.HotspotId;
+            }
+            return null;
+        }
+
         public bool TryExamineHotspot(string hotspotId, InspectionRotationModel rotation)
         {
             if (!active || currentHotspots == null)
