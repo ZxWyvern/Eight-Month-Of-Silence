@@ -36,6 +36,7 @@ namespace Yumiwa.Presentation
             Action resume,
             Action load,
             Action newGame,
+            Action mainMenu,
             Action<SettingsData> settingsChanged)
         {
             current = initial;
@@ -68,30 +69,31 @@ namespace Yumiwa.Presentation
             MakeButton(panel.transform, "Resume", new Vector2(0, 205), "Lanjutkan (P)", resume);
             MakeButton(panel.transform, "Load", new Vector2(0, 145), "Muat Checkpoint", load);
             MakeButton(panel.transform, "New", new Vector2(0, 85), "Mulai Baru", newGame);
+            MakeButton(panel.transform, "MainMenu", new Vector2(0, 25), "Menu Utama", mainMenu);
 
-            var st = MakeText(panel.transform, "SettingsTitle", new Vector2(0, 25), new Vector2(600, 40), 24);
+            var st = MakeText(panel.transform, "SettingsTitle", new Vector2(0, -35), new Vector2(600, 40), 24);
             st.text = "Pengaturan";
 
-            sensitivitySlider = MakeSlider(panel.transform, "Sens", new Vector2(0, -30),
+            sensitivitySlider = MakeSlider(panel.transform, "Sens", new Vector2(0, -90),
                 0.2f, 3f, initial.MouseSensitivity, "Sensitivitas", out sensitivityValue);
-            fovSlider = MakeSlider(panel.transform, "Fov", new Vector2(0, -85),
+            fovSlider = MakeSlider(panel.transform, "Fov", new Vector2(0, -145),
                 60f, 90f, initial.Fov, "FOV", out fovValue);
-            subtitleOpacitySlider = MakeSlider(panel.transform, "SubsBg", new Vector2(0, -280),
+            subtitleOpacitySlider = MakeSlider(panel.transform, "SubsBg", new Vector2(0, -340),
                 0f, 1f, initial.SubtitleBackgroundOpacity, "Latar Subtitle", out subtitleOpacityValue);
 
-            headBobToggle = MakeToggle(panel.transform, "Bob", new Vector2(-160, -140),
+            headBobToggle = MakeToggle(panel.transform, "Bob", new Vector2(-160, -200),
                 "Head Bob", initial.HeadBobEnabled);
-            shakeToggle = MakeToggle(panel.transform, "Shake", new Vector2(160, -140),
+            shakeToggle = MakeToggle(panel.transform, "Shake", new Vector2(160, -200),
                 "Shake", initial.CameraShakeEnabled);
-            fovBoostToggle = MakeToggle(panel.transform, "Boost", new Vector2(-160, -185),
+            fovBoostToggle = MakeToggle(panel.transform, "Boost", new Vector2(-160, -245),
                 "FOV Boost", initial.FovBoostEnabled);
-            subtitlesToggle = MakeToggle(panel.transform, "Subs", new Vector2(160, -185),
+            subtitlesToggle = MakeToggle(panel.transform, "Subs", new Vector2(160, -245),
                 "Subtitle", initial.SubtitlesEnabled);
 
-            var textSizeButton = MakeOptionButton(panel.transform, "TextSize", new Vector2(-160, -225),
+            var textSizeButton = MakeOptionButton(panel.transform, "TextSize", new Vector2(-160, -285),
                 out textSizeLabel);
             textSizeButton.onClick.AddListener(CycleTextSize);
-            var readingSpeedButton = MakeOptionButton(panel.transform, "ReadSpeed", new Vector2(160, -225),
+            var readingSpeedButton = MakeOptionButton(panel.transform, "ReadSpeed", new Vector2(160, -285),
                 out readingSpeedLabel);
             readingSpeedButton.onClick.AddListener(CycleReadingSpeed);
 

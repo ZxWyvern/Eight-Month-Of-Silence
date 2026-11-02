@@ -22,6 +22,7 @@ namespace Yumiwa.Presentation
         [SerializeField] private FlashlightConfig flashlightConfig;
         [SerializeField] private List<ItemData> itemDatabase = new List<ItemData>();
         [SerializeField] private List<GameObject> presenterRoots = new List<GameObject>();
+        [SerializeField] private bool mainMenuMode;
         [SerializeField] private MissionSequenceAsset missionSequence;
         [SerializeField] private List<PuzzleDefinitionAsset> puzzleAssets = new List<PuzzleDefinitionAsset>();
         [SerializeField] private List<TrapDefinitionAsset> trapAssets = new List<TrapDefinitionAsset>();
@@ -48,6 +49,13 @@ namespace Yumiwa.Presentation
 
         protected override void Configure(IContainerBuilder builder)
         {
+            if (mainMenuMode)
+            {
+                builder.Register<ISaveRepository>(_ => new JsonFileSaveRepository(), Lifetime.Singleton);
+                builder.Register<ISceneLoader>(_ => new UnitySceneLoader(), Lifetime.Singleton);
+                return;
+            }
+
             if (movementConfig == null || staminaConfig == null || inputAsset == null || playerRoot == null)
                 throw new InvalidOperationException(
                     "[Yumiwa] GameLifetimeScope references unassigned. Run Yumiwa/Create Movement Test Scene.");

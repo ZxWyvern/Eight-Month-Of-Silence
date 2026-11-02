@@ -14,6 +14,8 @@ namespace Yumiwa.Presentation
     /// </summary>
     public sealed class PauseMenuPresenter : MonoBehaviour
     {
+        private const string MainMenuSceneName = "MainMenu";
+
         [SerializeField] private Transform playerTransform;
         [SerializeField] private PlayerMovementPresenter movement;
         [SerializeField] private FootstepPresenter footsteps;
@@ -62,6 +64,7 @@ namespace Yumiwa.Presentation
                 OnResume,
                 OnLoadCheckpoint,
                 OnNewGame,
+                OnMainMenu,
                 OnSettingsChanged);
         }
 
@@ -182,6 +185,14 @@ namespace Yumiwa.Presentation
             SaveSettings();
             SetPaused(false);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        private void OnMainMenu()
+        {
+            SaveSettings();
+            Time.timeScale = 1f;
+            SetPaused(false);
+            SceneManager.LoadScene(MainMenuSceneName);
         }
 
         private void OnSettingsChanged(SettingsData next)

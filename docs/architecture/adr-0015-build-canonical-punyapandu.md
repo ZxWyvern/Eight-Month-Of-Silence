@@ -1,7 +1,7 @@
 # ADR-0015: Build Canonical — PunyaPandu as buildIndex 0
 
 ## Status
-Accepted
+Superseded by ADR-0027 (production Main Menu boot). The ordering change below remains historical; current build index 0 is `MainMenu`, with `PunyaPandu` at index 1.
 
 ## Date
 2026-09-19
