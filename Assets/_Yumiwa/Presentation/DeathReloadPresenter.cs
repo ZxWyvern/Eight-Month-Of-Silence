@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 using Yumiwa.Application;
 using Yumiwa.Domain;
@@ -32,6 +33,11 @@ namespace Yumiwa.Presentation
             {
                 bootResumed = true;
                 var data = checkpoint.LoadChapter();
+                if (!IsCurrentScene(data))
+                {
+                    Debug.LogWarning($"[Yumiwa] Chapter save belongs to '{data.ActiveScene}', not the active scene; skipping cold resume.", this);
+                    return;
+                }
                 ApplySnapshot(data);
                 Debug.Log($"[Yumiwa] Resumed chapter save in {data.ActiveScene}.", this);
             }
@@ -50,8 +56,21 @@ namespace Yumiwa.Presentation
             if (checkpoint.HasCheckpoint) { data = checkpoint.LoadCheckpoint(); have = true; }
             else if (checkpoint.HasChapterSave) { data = checkpoint.LoadChapter(); have = true; }
             if (!have) { health.ResetHealth(); reloading=false; return; }
+            if (!IsCurrentScene(data))
+            {
+                Debug.LogWarning($"[Yumiwa] Death reload target '{data.ActiveScene}' is not the active scene; resetting in place.", this);
+                health.ResetHealth();
+                reloading=false;
+                return;
+            }
             ApplySnapshot(data);
             Debug.Log($"[Yumiwa] Death reload to {data.ActiveScene} milestone {data.Milestone}", this);
+        }
+
+        private static bool IsCurrentScene(CheckpointData data)
+        {
+            return string.IsNullOrEmpty(data.ActiveScene)
+                || data.ActiveScene == SceneManager.GetActiveScene().name;
         }
 
         private void ApplySnapshot(CheckpointData data)

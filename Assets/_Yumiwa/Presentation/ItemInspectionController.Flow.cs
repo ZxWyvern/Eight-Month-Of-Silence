@@ -7,6 +7,19 @@ namespace Yumiwa.Presentation
 {
     public sealed partial class ItemInspectionController
     {
+        private float nextHintRefresh;
+
+        private void Update()
+        {
+            if (!active || ui == null || hotspotPresenter == null)
+                return;
+            if (Time.unscaledTime < nextHintRefresh)
+                return;
+            nextHintRefresh = Time.unscaledTime + 0.15f;
+            bool hasHint = hotspotPresenter.TryPeekValid(out _);
+            ui.ShowHint(hasHint ? "Detail terlihat — [E] Periksa" : null);
+        }
+
         /// <summary>Entry point from PlayerInteractor. Ignored while busy.</summary>
         public void BeginInspection(IInspectable inspectable)
         {
@@ -38,6 +51,7 @@ namespace Yumiwa.Presentation
             active = true;
             takeInFlight = false;
             inspectionStartTime = Time.unscaledTime;
+            nextHintRefresh = 0f;
             Debug.Log($"[Yumiwa] Inspecting '{definition.DisplayName}'.", this);
 
             if (playerMap != null)
@@ -126,6 +140,7 @@ namespace Yumiwa.Presentation
                     ui.ShowMessage("Detail ditemukan!");
                 else
                     ui.ShowMessage("Tidak ada detail di sudut ini.");
+                nextHintRefresh = 0f;
             }
             Debug.Log($"[Yumiwa] Examine pressed — result={ok}.", this);
         }
@@ -145,6 +160,7 @@ namespace Yumiwa.Presentation
                 inspectionInput.ExaminePressed -= examinePressedHandler;
             inspectionInput.Disable();
             inspectionStartTime = 0f;
+            nextHintRefresh = 0f;
             if (presenter != null)
                 presenter.Hide();
             if (rotator != null)

@@ -52,5 +52,13 @@ namespace Yumiwa.Presentation
             Debug.Log("[Yumiwa] No valid hotspot at current angle.", this);
             return false;
         }
+
+        public bool TryPeekValid(out string hotspotId)
+        {
+            hotspotId = session != null && rotation != null && session.IsActive
+                ? session.PeekFirstValidHotspot(rotation)
+                : null;
+            return hotspotId != null;
+        }
     }
 }

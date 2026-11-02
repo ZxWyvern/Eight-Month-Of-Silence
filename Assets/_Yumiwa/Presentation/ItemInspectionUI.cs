@@ -16,6 +16,7 @@ namespace Yumiwa.Presentation
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text messageText;
+        [SerializeField] private TMP_Text hintText;
         [SerializeField] private Button takeButton;
         [SerializeField] private Button backButton;
 
@@ -27,6 +28,7 @@ namespace Yumiwa.Presentation
         private void Awake()
         {
             canvas = GetComponent<Canvas>();
+            hintText ??= BuildHintText();
             // Sembunyi sebelum frame pertama di-render: tidak ada flash fullscreen,
             // dan GameObject tetap aktif sehingga subscription tombol tetap hidup.
             SetVisible(false);
@@ -55,6 +57,7 @@ namespace Yumiwa.Presentation
                 nameText.text = definition.DisplayName;
             if (descriptionText != null)
                 descriptionText.text = definition.Description;
+            ClearHint();
             ClearMessage();
         }
 
@@ -67,7 +70,16 @@ namespace Yumiwa.Presentation
             }
         }
 
+        public void ShowHint(string message)
+        {
+            if (hintText == null)
+                return;
+            hintText.text = message ?? "";
+            hintText.gameObject.SetActive(!string.IsNullOrEmpty(message));
+        }
+
         public void ClearMessage() => ShowMessage(null);
+        public void ClearHint() => ShowHint(null);
 
         public void Show()
         {
@@ -76,6 +88,7 @@ namespace Yumiwa.Presentation
 
         public void Hide()
         {
+            ClearHint();
             SetVisible(false);
         }
 
@@ -90,6 +103,26 @@ namespace Yumiwa.Presentation
                 panel.SetActive(visible);
             if (canvas != null)
                 canvas.enabled = visible;
+        }
+
+        private TMP_Text BuildHintText()
+        {
+            var host = panel != null ? panel.transform : transform;
+            var go = new GameObject("HintText", typeof(RectTransform));
+            go.transform.SetParent(host, false);
+            var text = go.AddComponent<TextMeshProUGUI>();
+            text.text = "";
+            text.fontSize = 22;
+            text.color = new Color(1f, 0.82f, 0.42f, 1f);
+            text.alignment = TextAlignmentOptions.Center;
+            text.textWrappingMode = TextWrappingModes.Normal;
+            var rt = text.rectTransform;
+            rt.anchorMin = new Vector2(0.5f, 0.08f);
+            rt.anchorMax = new Vector2(0.5f, 0.08f);
+            rt.sizeDelta = new Vector2(720, 44);
+            rt.anchoredPosition = Vector2.zero;
+            go.SetActive(false);
+            return text;
         }
 
         private void HandleTake() => OnTakeClicked?.Invoke();

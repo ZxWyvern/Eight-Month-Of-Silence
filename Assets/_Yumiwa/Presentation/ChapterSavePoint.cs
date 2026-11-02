@@ -21,6 +21,7 @@ namespace Yumiwa.Presentation
         private IHealthService health;
         private IStaminaService stamina;
         private Act1ObjectiveChain chain;
+        private bool saved;
 
         [Inject]
         public void Construct(
@@ -43,7 +44,22 @@ namespace Yumiwa.Presentation
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent<PlayerMovementPresenter>(out _)) return;
+            TrySave(other);
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (!fireOnce || saved)
+                return;
+            TrySave(other);
+        }
+
+        private void TrySave(Collider other)
+        {
+            if (other == null || !other.TryGetComponent<PlayerMovementPresenter>(out _))
+                return;
+            if (fireOnce && saved)
+                return;
             if (checkpoint == null)
             {
                 Debug.LogWarning($"[Yumiwa] ChapterSavePoint '{pointId}' has no checkpoint service.", this);
@@ -66,6 +82,7 @@ namespace Yumiwa.Presentation
             };
             checkpoint.SaveChapter(data);
             chain?.OnEnterCrimeScene();
+            saved = true;
             Debug.Log($"[Yumiwa] Chapter saved at '{pointId}'.", this);
             if (fireOnce)
             {

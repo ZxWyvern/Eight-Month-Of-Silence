@@ -39,11 +39,6 @@ namespace Yumiwa.Presentation
 
         private void Start()
         {
-            // Auto-start for prototype scene (YumiwaMovementTest) — easy rework: remove if driven externally
-            if (missionFlow != null && missionFlow.Current == null && missionFlow.Count > 0)
-            {
-                missionFlow.Start();
-            }
             RefreshHud();
         }
 

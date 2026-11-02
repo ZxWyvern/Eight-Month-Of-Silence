@@ -48,7 +48,7 @@ namespace Yumiwa.Application.Tests
         }
 
         [Test]
-        public void FullChain_EnterObserveDeduce_AdvancesMissionOnce()
+        public void FullChain_EnterObserveDeduce_CompletesOnceAndStaysOnChapterBoundary()
         {
             var bus = new EventBus();
             var objectives = new ObjectiveService();
@@ -71,12 +71,12 @@ namespace Yumiwa.Application.Tests
             bus.Publish(new ReconstructionSolvedEvent("case_b1", "opt_panic"));
             Assert.IsTrue(chain.ChapterCompleted);
             Assert.IsTrue(objectives.IsObjectiveCompleted("b1_deduce"));
-            Assert.AreEqual("M02_Motel", mission.Current?.MissionId);
+            Assert.AreEqual("M01_Alley", mission.Current?.MissionId);
             Assert.AreEqual(1, completions);
 
-            // Repeated solve never advances twice.
+            // Repeated solve never completes twice or advances.
             bus.Publish(new ReconstructionSolvedEvent("case_b1", "opt_panic"));
-            Assert.AreEqual("M02_Motel", mission.Current?.MissionId);
+            Assert.AreEqual("M01_Alley", mission.Current?.MissionId);
             Assert.AreEqual(1, completions);
         }
 

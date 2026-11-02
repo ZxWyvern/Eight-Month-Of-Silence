@@ -163,9 +163,23 @@ namespace Yumiwa.Presentation
 
         private void OnLoadCheckpoint()
         {
-            if (checkpoint == null || playerTransform == null || !checkpoint.HasCheckpoint) return;
+            if (checkpoint == null || playerTransform == null) return;
 
-            var data = checkpoint.LoadCheckpoint();
+            CheckpointData data;
+            if (checkpoint.HasCheckpoint)
+                data = checkpoint.LoadCheckpoint();
+            else if (checkpoint.HasChapterSave)
+                data = checkpoint.LoadChapter();
+            else
+                return;
+
+            if (!string.IsNullOrEmpty(data.ActiveScene)
+                && data.ActiveScene != SceneManager.GetActiveScene().name)
+            {
+                Debug.LogWarning($"[MVP-01] Checkpoint belongs to '{data.ActiveScene}', not the active scene.");
+                return;
+            }
+
             var controller = playerTransform.GetComponent<CharacterController>();
             if (controller != null) controller.enabled = false;
             playerTransform.SetPositionAndRotation(

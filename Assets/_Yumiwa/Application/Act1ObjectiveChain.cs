@@ -90,10 +90,6 @@ namespace Yumiwa.Application
                 objectives.UpdateObjectiveStatus(config.DeduceObjectiveId, ObjectiveStatus.Completed);
             chapterCompleted = true;
             objectives.CompleteChapter(config.Chapter);
-            if (mission != null && mission.Current.HasValue
-                && mission.Current.Value.MissionId == config.MissionId
-                && mission.CanAdvance)
-                mission.Advance();
             bus?.Publish(new Act1ChapterCompletedEvent(config.MissionId));
         }
 
