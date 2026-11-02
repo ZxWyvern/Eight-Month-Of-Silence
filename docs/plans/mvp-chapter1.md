@@ -35,12 +35,29 @@ Implementasikan Minimum Viable Product (MVP) Bab 1 sebagai level TKP yang dapat 
 - ADR-0027 accepted; ADR-0028 Proposed, committed + pushed (`eb5d4c5`, `b71b726`).
 - `ChapterEntryPresenter` + `ChapterCompletionPresenter` baru; guard checkpoint/scene, Act1 chapter boundary, inspection peek/hint — code committed, **integrasi scene + verifikasi runtime masih pending**.
 
-### Fase 2 — Siapkan Tkp1 sebagai Kanvas Bab 1 (pending)
-1. Buka `Assets/Scenes/Tkp1.unity` (build index 2).
-2. Ukur transform lokal/dunia root `GameObject` + anaknya sebelum mengubah apa pun; pindahkan/pasang pemain, kamera, GameLifetimeScope, dan UI dari `PunyaPandu` ke `Tkp1` hanya setelah pengukuran.
-3. Ratakan posisi hanya bila pengukuran membuktikan offset root adalah penyebab misalignment; jangan set `(0,0,0)` buta.
-4. Pasang `ChapterEntryPresenter` agar `M01_Alley` otomatis dimulai saat memasak scene.
-5. Pasang `ChapterCompletionPresenter` untuk menampilkan kartu selesai dan kembali ke Main Menu.
+### Fase 2 — Siapkan Tkp1 sebagai Kanvas Bab 1 (assembled 2026-11-02, verifikasi parsial PASS)
+
+> Hasil sesi 2026-11-02: rig gameplay dirakit di `Tkp1` via salinan prefab (PunyaPandu TIDAK diubah/dihancurkan).
+> Pengukuran: root `GameObject` di `(30.69, -0.04, -16.59)` — offset terbukti milik environment,
+> bukan penyebab misalignment; tidak ada zero-buta. Titik spawn `(0, 1, -30)` raycast aman di atas Cube koridor.
+
+1. Buka `Assets/Scenes/Tkp1.unity` (build index 2) — DONE, scene tersimpan via MCP.
+2. Ukur transform lokal/dunia root `GameObject` + anaknya — DONE (`GameObject/Cube (10)`:
+   dunia `(-8.46, 0.01, 22.17)` vs lokal `(-39.16, 0.05, 38.77)`, skala `(21.28, 0.10, 23.24)`;
+   raycast koridor `x=-6..6, z=-34..-28` hit `y=0.08` aman; `z=-25..-22` kosong).
+3. Ratakan posisi hanya bila terbukti perlu — TIDAK DILAKUKAN (tidak terbukti perlu; plan revisi `9fe70ea` dipush).
+4. Pasang `ChapterEntryPresenter` (`ChapterEntry`) + `ChapterCompletionPresenter` (`ChapterCompletion`) —
+   DONE, keduanya di `presenterRoots` GameScope (total 19: 14 rig + HealthHud + WaterZone_Demo + 2 chapter + B1_SavePoint).
+5. `GameScope.playerRoot` → `YumiwaPlayer`; `PauseMenu` (player/movement/footsteps/subtitles) +
+   `ReconstructionBoard.playerTransform` + `InspectionRig.ui` + `PlayerInteractor.inspection` di-wire ulang
+   (referensi prefab-copy yang putus) — DONE.
+6. Bukti B1 di TKP: `B1_Evidence_Body (-3, 0.5, -32)`, `B1_Evidence_Scratch (-1, 0.5, -33)`,
+   `B1_Evidence_Blood (1.5, 0.5, -31.5)` — semua `itemId` + `inspectionPrefab` utuh;
+   `B1_SavePoint (0, 1, -28)` `pointId=b1_entry, fireOnce=true` — DONE.
+7. Play-verify parsial: run-1 `PlayerInteractor has no inspection controller` (ERROR, diperbaiki);
+   run-2 console 0 error, `Mission: M01_Alley (Chapter1_BloodTrail)` via ChapterEntry, container ready,
+   screenshot `Assets/Screenshots/tkp1-phase2-rig-play.png` — PASS parsial.
+   Sisa: jalan-ke-evidence, inspect/take, rekonstruksi solve, death/pause/retry, kembali Main Menu (Fase 6).
 
 ### Fase 3 — Gameplay & Interaksi B1
 1. Pasang 3 evidence B1 (`B1_ItemBody`, `B1_ItemBlood`, `B1_ItemScratch`) sebagai `WorldInspectableItem` di lokasi yang sesuai.
