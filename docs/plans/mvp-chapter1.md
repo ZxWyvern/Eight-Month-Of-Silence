@@ -59,7 +59,21 @@ Implementasikan Minimum Viable Product (MVP) Bab 1 sebagai level TKP yang dapat 
    screenshot `Assets/Screenshots/tkp1-phase2-rig-play.png` — PASS parsial.
    Sisa: jalan-ke-evidence, inspect/take, rekonstruksi solve, death/pause/retry, kembali Main Menu (Fase 6).
 
-### Fase 3 — Gameplay & Interaksi B1
+### Fase 3 — Gameplay & Interaksi B1 (paket prefab Chapter1, siap drop ke scene real — 2026-11-04)
+
+> Dua prefab kit komposisi (nested prefab, bukan re-snapshot scene):
+> - `Assets/_Yumiwa/Prefabs/Chapter1/B1_OfficeKit.prefab` — alur Office: `B1_Door_ToTkp1`
+>   (`DoorScenePortal`, `targetSceneName = Tkp1`) + `B1_CallTrigger` (BoxCollider trigger +
+>   `DialogueTrigger` mode Sequence `seq_inspector_call` = `Call_Seq_InspectorCall`: L1–L4/J1–J3).
+> - `Assets/_Yumiwa/Prefabs/Chapter1/B1_Tkp1Kit.prefab` — full rig + konten B1 (19 anak):
+>   `GameScope` (presenterRoots 19, playerRoot → YumiwaPlayer), `YumiwaPlayer` (Tkp1, spawn `(0,1,-30)`),
+>   `InspectionRig`+`InspectionUI`, `StaminaHud`, `InventoryHUD`, `EvidenceLog`, `MissionHUD`,
+>   `SubtitleView`, `TitleCardView`, `ReconstructionBoard` (`case_b1`), `PauseMenu`, `EventSystem`,
+>   `B1_Evidence_Body/Scratch/Blood`, `B1_SavePoint` (`b1_entry`), `ChapterEntry`, `ChapterCompletion`.
+> Cara pakai: drag `B1_OfficeKit` ke scene Office (atur posisi pintu/trigger mengikuti layout),
+> drag `B1_Tkp1Kit` ke scene TKP1 (atur posisi 3 evidence + save point mengikuti layout nyata).
+
+### Fase 3 (asal) — Gameplay & Interaksi B1
 1. Pasang 3 evidence B1 (`B1_ItemBody`, `B1_ItemBlood`, `B1_ItemScratch`) sebagai `WorldInspectableItem` di lokasi yang sesuai.
 2. Pasang `B1_SavePoint` sebagai `ChapterSavePoint` dengan `pointId = b1_entry`, `fireOnce = true`.
 3. Pasang `B1_PrefabBody/Blood/Scratch` sebagai inspection prefab.
