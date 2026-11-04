@@ -29,17 +29,35 @@ Implementasikan Minimum Viable Product (MVP) Bab 1 sebagai level TKP yang dapat 
 
 ## 3. Fase Implementasi
 
-### Fase 1 — Fondasi Bot (selesai)
+### Fase 1 — Fondasi Bot (selesai, committed + pushed)
 - Main Menu production slice di-commit (`e7bf420`).
 - GameLifetimeScope dengan menu-only registration.
-- ADR-0027 accepted; ADR-0028 dibuat dan belum dipush.
+- ADR-0027 accepted; ADR-0028 Proposed, committed + pushed (`eb5d4c5`, `b71b726`).
+- `ChapterEntryPresenter` + `ChapterCompletionPresenter` baru; guard checkpoint/scene, Act1 chapter boundary, inspection peek/hint — code committed, **integrasi scene + verifikasi runtime masih pending**.
 
-### Fase 2 — Siapkan Tkp1 sebagai Kanvas Bab 1
-1. Buka `Assets/Scenes/Tkp1.unity` (build index 2).
-2. Pindahkan/pasang pemain, kamera, GameLifetimeScope, dan UI dari `PunyaPandu` ke `Tkp1`.
-3. Set root `Tkp1` ke `(0,0,0)` agar floor dan prop rata.
-4. Pasang `ChapterEntryPresenter` agar `M01_Alley` otomatis dimulai saat memasak scene.
-5. Pasang `ChapterCompletionPresenter` untuk menampilkan kartu selesai dan kembali ke Main Menu.
+### Fase 2 — Siapkan Tkp1 sebagai Kanvas Bab 1 (assembled 2026-11-02, verifikasi parsial PASS)
+
+> Hasil sesi 2026-11-02: rig gameplay dirakit di `Tkp1` via salinan prefab (PunyaPandu TIDAK diubah/dihancurkan).
+> Pengukuran: root `GameObject` di `(30.69, -0.04, -16.59)` — offset terbukti milik environment,
+> bukan penyebab misalignment; tidak ada zero-buta. Titik spawn `(0, 1, -30)` raycast aman di atas Cube koridor.
+
+1. Buka `Assets/Scenes/Tkp1.unity` (build index 2) — DONE, scene tersimpan via MCP.
+2. Ukur transform lokal/dunia root `GameObject` + anaknya — DONE (`GameObject/Cube (10)`:
+   dunia `(-8.46, 0.01, 22.17)` vs lokal `(-39.16, 0.05, 38.77)`, skala `(21.28, 0.10, 23.24)`;
+   raycast koridor `x=-6..6, z=-34..-28` hit `y=0.08` aman; `z=-25..-22` kosong).
+3. Ratakan posisi hanya bila terbukti perlu — TIDAK DILAKUKAN (tidak terbukti perlu; plan revisi `9fe70ea` dipush).
+4. Pasang `ChapterEntryPresenter` (`ChapterEntry`) + `ChapterCompletionPresenter` (`ChapterCompletion`) —
+   DONE, keduanya di `presenterRoots` GameScope (total 19: 14 rig + HealthHud + WaterZone_Demo + 2 chapter + B1_SavePoint).
+5. `GameScope.playerRoot` → `YumiwaPlayer`; `PauseMenu` (player/movement/footsteps/subtitles) +
+   `ReconstructionBoard.playerTransform` + `InspectionRig.ui` + `PlayerInteractor.inspection` di-wire ulang
+   (referensi prefab-copy yang putus) — DONE.
+6. Bukti B1 di TKP: `B1_Evidence_Body (-3, 0.5, -32)`, `B1_Evidence_Scratch (-1, 0.5, -33)`,
+   `B1_Evidence_Blood (1.5, 0.5, -31.5)` — semua `itemId` + `inspectionPrefab` utuh;
+   `B1_SavePoint (0, 1, -28)` `pointId=b1_entry, fireOnce=true` — DONE.
+7. Play-verify parsial: run-1 `PlayerInteractor has no inspection controller` (ERROR, diperbaiki);
+   run-2 console 0 error, `Mission: M01_Alley (Chapter1_BloodTrail)` via ChapterEntry, container ready,
+   screenshot `Assets/Screenshots/tkp1-phase2-rig-play.png` — PASS parsial.
+   Sisa: jalan-ke-evidence, inspect/take, rekonstruksi solve, death/pause/retry, kembali Main Menu (Fase 6).
 
 ### Fase 3 — Gameplay & Interaksi B1
 1. Pasang 3 evidence B1 (`B1_ItemBody`, `B1_ItemBlood`, `B1_ItemScratch`) sebagai `WorldInspectableItem` di lokasi yang sesuai.
@@ -48,17 +66,17 @@ Implementasikan Minimum Viable Product (MVP) Bab 1 sebagai level TKP yang dapat 
 4. Pasang `ReconstructionBoard` dengan case `case_b1`, opsi benar `opt_panic`.
 5. Pasang `EvidenceLog`, `MissionHud`, `InspectionRig`, `InspectionUI`, `TitleCardView`, `SubtitleView`.
 
-### Fase 4 — Sistem & Flow
-1. `ChapterSavePoint` tulis checkpoint bab saat pemain masuk (sudah diimplementasi).
-2. `DeathReloadPresenter` fail/retry dengan scene guard (sudah diimplementasi).
-3. `PauseMenuPresenter` fallback ke chapter save dan scene guard (sudah diimplementasi).
-4. `Act1ObjectiveChain` berhenti di bab boundary, publish `Act1ChapterCompletedEvent` (sudah diimplementasi).
-5. `InspectionSessionService.PeekFirstValidHotspot` untuk hint inspeksi (sudah diimplementasi).
-6. `ItemInspectionUI` hint text dan `ItemInspectionController` refresh hint setiap 0.15 detik (sudah diimplementasi).
+### Fase 4 — Sistem & Flow (code committed; integrasi + verifikasi pending)
+1. `ChapterSavePoint` tulis checkpoint bab saat pemain masuk.
+2. `DeathReloadPresenter` fail/retry dengan scene guard.
+3. `PauseMenuPresenter` fallback ke chapter save dan scene guard.
+4. `Act1ObjectiveChain` berhenti di bab boundary, publish `Act1ChapterCompletedEvent`.
+5. `InspectionSessionService.PeekFirstValidHotspot` untuk hint inspeksi.
+6. `ItemInspectionUI` hint text dan `ItemInspectionController` refresh hint setiap 0.15 detik.
 
-### Fase 5 — Tutorial Dialogue
-1. Tambah `DialogueTrigger` untuk: movimento, interaksi, inspeksi, Evidence Log/inventory, reconstruction, dan pesan penutup James.
-2. Gunakan `SAMPLE_Speaker_James`, `SAMPLE_Line_Observe`, `SAMPLE_Line_Note` sebagai awal; buat line baru jika perlu.
+### Fase 5 — Tutorial Dialogue (pending)
+1. Tambah `DialogueTrigger` B1: movement, interaksi, inspeksi, Evidence Log/inventory, reconstruction, dan pesan penutup James.
+2. Gunakan SAMPLE hanya sebagai referensi; buat aset B1 (`B1_Line_*`, `B1_Speaker_James`, `B1_Sequence_*`) — jangan ship teks SAMPLE sebagai final.
 3. Dialogue non-blocking, tidak gate progresi.
 
 ### Fase 6 — Polish & Verifikasi
@@ -121,8 +139,8 @@ Implementasikan Minimum Viable Product (MVP) Bab 1 sebagai level TKP yang dapat 
 
 ## 7. Langkah Berikutnya
 
-1. Commit dan push `docs/plans/mvp-chapter1.md`.
+1. Commit dan push revisi `docs/plans/mvp-chapter1.md`.
 2. Siapkan `Tkp1` dengan pemain, kamera, dan UI (Fase 2).
 3. Pasang evidence B1 dan save point (Fase 3).
 4. Play-mode verification semua alur (Fase 6).
-5. Jika verifikasi berhasil, update ADR-0028 ke `Accepted` dan promote `Tkp1` ke build index 2.
+5. Jika verifikasi berhasil, update ADR-0028 ke `Accepted` dan promote `Tkp1` ke build index 1 (`PunyaPandu` ke index 2).
