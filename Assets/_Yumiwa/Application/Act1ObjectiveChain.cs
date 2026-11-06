@@ -3,8 +3,11 @@ using Yumiwa.Domain;
 namespace Yumiwa.Application
 {
     /// <summary>
-    /// Bab 1 objective chain (B1-04): masuk TKP → observasi/dokumentasi bukti →
-    /// deduksi → selesai. Event-driven over the typed bus; owns no Unity types.
+    /// Bab 1 objective chain (B1-04, disederhanakan ADR-0030): masuk TKP →
+    /// observasi/dokumentasi bukti → langsung selesai + fade ke scene berikut.
+    /// Mekanik rekonstruksi dihapus dari alur: bukti lengkap (body + blood)
+    /// langsung menyelesaikan chapter tanpa menunggu ReconstructionSolvedEvent.
+    /// Event-driven over the typed bus; owns no Unity types.
     /// Idempotent: repeated triggers, re-added evidence and reloads never
     /// complete twice or advance past the chapter. Mission advance stops at the
     /// chapter boundary — STORY-01 owns the Bab 1 → Bab 2 scene transition.
@@ -78,14 +81,24 @@ namespace Yumiwa.Application
                 return;
             if (!objectives.IsObjectiveActive(config.ObserveObjectiveId))
                 return;
-            if (AllEvidencePresent())
-                objectives.UpdateObjectiveStatus(config.ObserveObjectiveId, ObjectiveStatus.Completed);
+            if (!AllEvidencePresent())
+                return;
+            objectives.UpdateObjectiveStatus(config.ObserveObjectiveId, ObjectiveStatus.Completed);
+            // ADR-0030: rekonstruksi dihapus — bukti lengkap langsung selesaikan chapter.
+            CompleteChapterNow();
         }
 
         private void OnReconstructionSolved(ReconstructionSolvedEvent e)
         {
+            // ADR-0030: fallback jika board masih terbuka di scene lama — abaikan bila
+            // chapter sudah selesai via bukti; selain itu pertahankan perilaku lama.
             if (!config.IsValid || chapterCompleted || e.CaseId != config.CaseId)
                 return;
+            CompleteChapterNow();
+        }
+
+        private void CompleteChapterNow()
+        {
             if (objectives.IsObjectiveActive(config.DeduceObjectiveId))
                 objectives.UpdateObjectiveStatus(config.DeduceObjectiveId, ObjectiveStatus.Completed);
             chapterCompleted = true;
@@ -97,6 +110,17 @@ namespace Yumiwa.Application
         {
             if (AllEvidencePresent() && objectives.IsObjectiveActive(config.ObserveObjectiveId))
                 objectives.UpdateObjectiveStatus(config.ObserveObjectiveId, ObjectiveStatus.Completed);
+            // ADR-0030: tanpa rekonstruksi, bukti lengkap saja cukup untuk deduce.
+            if (AllEvidencePresent()
+                && objectives.IsObjectiveActive(config.DeduceObjectiveId))
+            {
+                objectives.UpdateObjectiveStatus(config.DeduceObjectiveId, ObjectiveStatus.Completed);
+                chapterCompleted = true;
+                objectives.CompleteChapter(config.Chapter);
+                if (publishCompletion)
+                    bus?.Publish(new Act1ChapterCompletedEvent(config.MissionId));
+                return;
+            }
             if (evidenceLog != null && !string.IsNullOrEmpty(config.DeductionEvidenceId)
                 && evidenceLog.HasEvidence(config.DeductionEvidenceId))
             {

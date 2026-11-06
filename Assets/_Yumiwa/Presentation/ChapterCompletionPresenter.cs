@@ -2,24 +2,28 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using TMPro;
 using VContainer;
 using Yumiwa.Application;
 using Yumiwa.Domain;
 
 namespace Yumiwa.Presentation
 {
+    /// <summary>
+    /// ADR-0030/0031: bukti lengkap → fade hitam full → scene berikut.
+    /// Tidak ada panel/teks/tombol — seluruh UI teks "BAB 1 SELESAI" dihapus.
+    /// </summary>
     public sealed class ChapterCompletionPresenter : MonoBehaviour
     {
         [SerializeField] private float autoReturnSeconds = 8f;
+        [Tooltip("Scene tujuan setelah bukti lengkap (fade cut). Harus ada di Build Settings.")]
+        [SerializeField] private string nextSceneName = "Hutan";
+        [Tooltip("Fader untuk transisi. Kosong = dicari di scene, lalu dibuat runtime bila tidak ada.")]
+        [SerializeField] private ScreenFader fader;
 
         private IEventBus bus;
         private ISceneLoader loader;
         private InputActionAsset inputAsset;
         private InputActionMap playerMap;
-        private GameObject panel;
-        private TMP_Text bodyText;
         private bool completed;
         private bool returning;
         private bool subscribed;
@@ -30,11 +34,6 @@ namespace Yumiwa.Presentation
             this.bus = bus;
             this.loader = loader;
             this.inputAsset = inputAsset;
-        }
-
-        private void Awake()
-        {
-            BuildUi();
         }
 
         private void OnEnable()
@@ -68,16 +67,11 @@ namespace Yumiwa.Presentation
             if (completed)
                 return;
             completed = true;
-            if (panel != null)
-                panel.SetActive(true);
-            if (bodyText != null)
-                bodyText.text = "Kasus dibuka. Jejak mengarah pada satu nama.\n\nLanjut ke Menu Utama.";
             if (inputAsset != null)
             {
                 playerMap = inputAsset.FindActionMap("Player", false);
                 playerMap?.Disable();
             }
-            Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             StartCoroutine(AutoReturn());
@@ -85,105 +79,50 @@ namespace Yumiwa.Presentation
 
         private IEnumerator AutoReturn()
         {
-            yield return new WaitForSecondsRealtime(Mathf.Max(1f, autoReturnSeconds));
-            ReturnToMenu();
+            yield return new WaitForSecondsRealtime(0.5f);
+            yield return FadeAndGoNext();
         }
 
-        private void ReturnToMenu()
+        private IEnumerator FadeAndGoNext()
         {
             if (returning)
-                return;
+                yield break;
             returning = true;
-            StopAllCoroutines();
-            Time.timeScale = 1f;
             playerMap?.Enable();
+            Time.timeScale = 1f;
+            if (fader == null)
+            {
+                fader = GetComponentInChildren<ScreenFader>(true);
+                if (fader == null)
+                    fader = FindFirstObjectByType<ScreenFader>();
+            }
+            if (fader == null)
+                fader = gameObject.AddComponent<ScreenFader>();
+            System.Threading.Tasks.Task fadeTask = null;
+            try { fadeTask = fader.FadeOutAsync(); }
+            catch (System.Exception e) { Debug.LogWarning("[Yumiwa] Fade out gagal, cut langsung ke '" + nextSceneName + "': " + e.Message, this); }
+            if (fadeTask != null)
+                yield return new WaitUntil(() => fadeTask.IsCompleted);
+            if (string.IsNullOrEmpty(nextSceneName))
+            {
+                Debug.LogError("[Yumiwa] ChapterCompletion nextSceneName kosong — tetap di scene ini.", this);
+                yield break;
+            }
             if (loader == null)
             {
-                SceneManager.LoadScene("MainMenu");
-                return;
+                SceneManager.LoadScene(nextSceneName);
+                yield break;
             }
-            StartCoroutine(LoadMenu());
+            yield return LoadNext();
         }
 
-        private IEnumerator LoadMenu()
+        private IEnumerator LoadNext()
         {
-            var task = loader.LoadSceneAsync("MainMenu");
+            var task = loader.LoadSceneAsync(nextSceneName);
             while (task != null && !task.IsCompleted)
                 yield return null;
             if (task != null && task.IsFaulted)
-                Debug.LogError($"[Yumiwa] Failed to load MainMenu: {task.Exception}");
-        }
-
-        private void BuildUi()
-        {
-            var canvasGO = new GameObject("ChapterCompletionCanvas", typeof(RectTransform));
-            canvasGO.transform.SetParent(transform, false);
-            var canvas = canvasGO.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 210;
-            canvasGO.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            canvasGO.AddComponent<GraphicRaycaster>();
-
-            panel = new GameObject("Panel", typeof(RectTransform));
-            panel.transform.SetParent(canvasGO.transform, false);
-            var panelImage = panel.AddComponent<Image>();
-            panelImage.color = new Color(0.015f, 0.018f, 0.022f, 0.96f);
-            var panelRt = panel.GetComponent<RectTransform>();
-            panelRt.anchorMin = Vector2.zero;
-            panelRt.anchorMax = Vector2.one;
-            panelRt.offsetMin = Vector2.zero;
-            panelRt.offsetMax = Vector2.zero;
-
-            var title = MakeText(panel.transform, "Title", "BAB 1 SELESAI", 58, FontStyles.Bold);
-            var titleRt = title.rectTransform;
-            titleRt.anchorMin = new Vector2(0.5f, 0.68f);
-            titleRt.anchorMax = new Vector2(0.5f, 0.68f);
-            titleRt.sizeDelta = new Vector2(900, 90);
-            titleRt.anchoredPosition = Vector2.zero;
-            title.alignment = TextAlignmentOptions.Center;
-
-            bodyText = MakeText(panel.transform, "Body", "", 26, FontStyles.Normal);
-            var bodyRt = bodyText.rectTransform;
-            bodyRt.anchorMin = new Vector2(0.5f, 0.5f);
-            bodyRt.anchorMax = new Vector2(0.5f, 0.5f);
-            bodyRt.sizeDelta = new Vector2(820, 180);
-            bodyRt.anchoredPosition = Vector2.zero;
-            bodyText.alignment = TextAlignmentOptions.Center;
-            bodyText.color = new Color(0.84f, 0.86f, 0.88f, 1f);
-
-            var buttonGO = new GameObject("ReturnButton", typeof(RectTransform));
-            buttonGO.transform.SetParent(panel.transform, false);
-            var buttonImage = buttonGO.AddComponent<Image>();
-            buttonImage.color = new Color(0.32f, 0.06f, 0.06f, 1f);
-            var button = buttonGO.AddComponent<Button>();
-            button.targetGraphic = buttonImage;
-            var buttonRt = buttonGO.GetComponent<RectTransform>();
-            buttonRt.anchorMin = new Vector2(0.5f, 0.28f);
-            buttonRt.anchorMax = new Vector2(0.5f, 0.28f);
-            buttonRt.sizeDelta = new Vector2(360, 64);
-            buttonRt.anchoredPosition = Vector2.zero;
-            var buttonText = MakeText(buttonGO.transform, "Label", "Kembali ke Menu Utama", 24, FontStyles.Bold);
-            var labelRt = buttonText.rectTransform;
-            labelRt.anchorMin = Vector2.zero;
-            labelRt.anchorMax = Vector2.one;
-            labelRt.offsetMin = Vector2.zero;
-            labelRt.offsetMax = Vector2.zero;
-            buttonText.alignment = TextAlignmentOptions.Center;
-            button.onClick.AddListener(ReturnToMenu);
-            panel.SetActive(false);
-        }
-
-        private static TMP_Text MakeText(Transform parent, string name, string value, float size, FontStyles style)
-        {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            var text = go.AddComponent<TextMeshProUGUI>();
-            text.text = value;
-            text.fontSize = size;
-            text.fontStyle = style;
-            text.color = Color.white;
-            text.enableWordWrapping = true;
-            return text;
+                Debug.LogError($"[Yumiwa] Failed to load {nextSceneName}: {task.Exception}");
         }
     }
 }

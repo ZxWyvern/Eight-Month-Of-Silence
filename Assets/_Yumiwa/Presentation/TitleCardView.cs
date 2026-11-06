@@ -31,6 +31,9 @@ namespace Yumiwa.Presentation
 
         public bool IsShowing => canvasGroup != null && canvasGroup.alpha > 0.01f;
 
+        public int TotalChars => FullText().Length;
+        public bool IsComplete => shownChars >= 0 && shownChars >= FullText().Length;
+
         private void Awake()
         {
             if (titleText == null)
